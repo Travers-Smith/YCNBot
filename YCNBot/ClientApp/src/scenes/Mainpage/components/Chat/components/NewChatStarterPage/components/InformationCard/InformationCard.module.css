@@ -1,0 +1,19 @@
+.informationCard {
+    border-radius: 5px;
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+.informationCardDark{
+    background-color: #606169;
+    color: white;
+}
+
+.informationCardLight{
+    background-color: #ececec;
+    border: 1px solid lightgrey;
+}
+
+.clickable {
+    cursor: pointer;
+}

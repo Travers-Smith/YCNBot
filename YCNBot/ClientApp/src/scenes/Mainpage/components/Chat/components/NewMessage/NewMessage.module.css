@@ -1,0 +1,59 @@
+.newMessageContainer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-top: 12px;
+}
+
+.newMessage {
+    width: 95%;
+    padding: 15px;
+    min-height: 50px;
+    max-height: 15vh;
+    overflow-y: auto;
+}
+
+.newMessage:focus{
+    outline: none;
+}
+
+.dark {
+    color: white;
+}
+
+.newMessageBody {
+    border: 1px solid darkgrey;   
+    border-radius: 5px;
+    width: 70%;
+    display: flex;
+}
+
+.recordChatWarning {
+    text-align: center;
+    font-weight: 500;
+    padding-top: 10px;
+}
+
+.submitButton{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    width: 5%;
+}
+
+.loadingContainer {
+    margin-right: 6px;
+}
+
+.loading {
+    color: rgb(163, 162, 162) !important;
+}
+
+.dark {
+    color: white;
+}
+
+.light {
+    color: black;
+}
