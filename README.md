@@ -64,6 +64,7 @@ Adding a new model requires 3 steps:
 1. Add a new ChatCompletionService in the YCNBot.Services project and ensure it implements the IChatCompletionService interface.
 2. In the ChatModelPickerService add a new case to the GetModel method and give the case the same name as the one provided in the app.
 3. Add the new chat completion service to the service collection in the program.cs file in the main project e.g. services.AddTransient<IChatCompletionService, YourNewChatCompletionService>();
+4. If the model relies on an external data source, e.g. third party API, add a new repository to the data access layer and add the repository to the UnitOfWork class. 
 
 ## Agreed to terms
 
