@@ -10,6 +10,7 @@ namespace YCNBot.Data.Repositories
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
+
         public AzureChatCompletionRepository(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
@@ -19,7 +20,7 @@ namespace YCNBot.Data.Repositories
         public async Task<ChatCompletion> CompleteChat(AddChatCompletionServiceModel addChatCompletion)
         {
             HttpResponseMessage response = await _httpClient.PostAsync(
-                "deployments/chatgpt3/chat/completions?api-version=" + _configuration["AzureApiVersion"],
+                $"deployments/{_configuration["AzureModelDeploymentName"]}/chat/completions?api-version={_configuration["AzureApiVersion"]}",
                 new StringContent(JsonSerializer.Serialize(addChatCompletion), Encoding.UTF8, "application/json"));
 
             response.EnsureSuccessStatusCode();
