@@ -1,5 +1,8 @@
-﻿namespace YCNBot.MessageHandlers
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace YCNBot.MessageHandlers
 {
+    [ExcludeFromCodeCoverage]
     public class AzureOpenAIClientHandler : DelegatingHandler
     {
         private readonly IConfiguration _configuration;

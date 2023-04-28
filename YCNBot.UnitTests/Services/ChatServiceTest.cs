@@ -1,6 +1,7 @@
 ﻿using Moq;
 using YCNBot.Core;
 using YCNBot.Core.Entities;
+using YCNBot.Models;
 using YCNBot.Services;
 
 namespace YCNBot.UnitTest.Services
@@ -140,6 +141,40 @@ namespace YCNBot.UnitTest.Services
             mock.Setup(x => x.Chat.GetByUniqueIdentifierWithMessages(It.IsAny<Guid>())).ThrowsAsync(new Exception());
 
             await Assert.ThrowsAsync<Exception>(() => new ChatService(mock.Object).GetByUniqueIdentifierWithMessages(Guid.NewGuid()));
+        }
+
+        [Fact]
+        public async Task GetUsersUsage_Success_ReturnsUsageDictionary()
+        {
+            var unitOfWork = new Mock<IUnitOfWork>();
+
+            Dictionary<Guid, int> usageDictionary = new();
+
+            int skip = 10;
+            int take = 10;
+
+            unitOfWork
+                .Setup(x => x.Chat.GetUsersUsage(skip, take))
+                .ReturnsAsync(usageDictionary);
+
+            Assert.Equal(usageDictionary, await new ChatService(unitOfWork.Object).GetUsersUsage(skip, take));
+        }
+
+        [Fact]
+        public async Task GetUsersUsage_Fails_ThrowsException()
+        {
+            var unitOfWork = new Mock<IUnitOfWork>();
+
+            Dictionary<Guid, int> usageDictionary = new();
+
+            int skip = 10;
+            int take = 10;
+
+            unitOfWork
+                .Setup(x => x.Chat.GetUsersUsage(skip, take))
+                .ThrowsAsync(new Exception());
+
+            await Assert.ThrowsAsync<Exception>(() => new ChatService(unitOfWork.Object).GetUsersUsage(skip, take));
         }
 
         [Fact]

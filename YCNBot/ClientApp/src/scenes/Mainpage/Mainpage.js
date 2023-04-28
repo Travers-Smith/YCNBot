@@ -4,6 +4,7 @@ import Chat from "./components/Chat/Chat";
 import Sidebar from "./components/Sidebar/Sidebar";
 import GlobalContext from "../../context/GlobalContext";
 import AcceptTermsDialog from "./components/AcceptTermsDialog/AcceptTermsDialog";
+import UserReport from "./components/UserReport/UserReport";
 
 const Mainpage = () => {
     const [open, setOpen] = useState(false);
@@ -12,7 +13,8 @@ const Mainpage = () => {
         messages: [],
         name: ""
     });
-
+    const userAgreedToTerms = sessionStorage.getItem("agreedToTerms") === "true";
+    const [showUserReport, setShowUserReport] = useState(false);
     const {
         user
     } = useContext(GlobalContext);
@@ -26,22 +28,28 @@ const Mainpage = () => {
     return (
         <div className={classes.chat}>
             <AcceptTermsDialog
-                open={open}
-                setOpen={setOpen}
+                open={!userAgreedToTerms}
+                setUserAgreedToTerms={agreed => sessionStorage.setItem("agreedToTerms", agreed)}
             />
             {
-                user?.agreedToTerms &&
+                userAgreedToTerms &&
                     <>
                         <Sidebar
                             chat={chat}
                             previousChats={previousChats}
                             setPreviousChats={setPreviousChats}
+                            setShowUserReport={setShowUserReport}
                         />
-                        <Chat
-                            chat={chat}
-                            setChat={setChat}
-                            setPreviousChats={setPreviousChats}
-                        />
+                        {
+                            showUserReport ?    
+                                <UserReport/>
+                            :
+                                <Chat
+                                    chat={chat}
+                                    setChat={setChat}
+                                    setPreviousChats={setPreviousChats}
+                                />
+                        }
                     </>
             }
         </div>

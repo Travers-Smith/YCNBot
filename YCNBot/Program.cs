@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Graph;
 using Microsoft.Identity.Web;
 using Polly;
 using System.Security.Cryptography.X509Certificates;
@@ -41,6 +42,14 @@ services.AddAuthorization(options =>
 {
     options.FallbackPolicy = options.DefaultPolicy;
     options.AddPolicy("AgreedToTerms", policy => policy.RequireClaim("AgreedToTerms"));
+
+    string? securityGroupId = builder.Configuration["SecurityGroupId"];
+
+    if (securityGroupId != null)
+    {
+        options.AddPolicy("Admins", policy => policy.RequireClaim("groups", securityGroupId));
+    }
+
 });
 
 services.AddHttpClient("OpenAIClient", options =>
@@ -83,14 +92,48 @@ services.AddTransient<IChatCompletionService, OpenAIChatCompletionService>();
 services.AddTransient<IChatModelPickerService, ChatModelPickerService>();
 services.AddTransient<IIdentityService, IdentityService>();
 services.AddTransient<IMessageService, MessageService>();
+services.AddTransient<IPersonalInformationCheckerService, PersonalInformationCheckerService>();
+services.AddTransient<ISymbolsRemoverService, SymbolsRemoverService>();
+services.AddTransient<IStopWordRemoverService, StopWordRemoverService>();
 services.AddTransient<IUserAgreedTermsService, UserAgreedTermsService>();
+services.AddTransient<IUserService,  UserService>();
+services.AddTransient<IUserFeedbackService, UserFeedbackService>();
 services.AddTransient<IClaimsTransformation, AgreedToTermsClaimTransformation>();
 
 string? azureADCertThumbprint = builder.Configuration["AzureADCertThumbprint"];
 
+if(azureADCertThumbprint != null)
+{
+    services.AddScoped(_ =>
+    {
+        var tenantId = builder.Configuration["AzureAd:TenantId"];
+
+        var clientId = builder.Configuration["AzureAd:ClientId"];
+
+        var clientSecret = builder.Configuration["ClientSecret"];
+
+        using var x509Store = new X509Store(StoreLocation.CurrentUser);
+
+        x509Store.Open(OpenFlags.ReadOnly);
+
+        var x509Certificate = x509Store.Certificates
+            .Find(
+                X509FindType.FindByThumbprint,
+                azureADCertThumbprint,
+                validOnly: false)
+            .OfType<X509Certificate2>()
+            .Single();
+
+        ClientCertificateCredential clientSecretCredential = new(builder.Configuration["AzureAd:TenantId"], builder.Configuration["AzureAd:ClientId"], x509Certificate);
+
+        return new GraphServiceClient(clientSecretCredential, new[] { "https://graph.microsoft.com/.default" });
+    });
+}
+
+
 if (builder.Environment.IsProduction() && azureADCertThumbprint != null)
 {
-    using X509Store x509Store = new (StoreLocation.CurrentUser);
+    using X509Store x509Store = new(StoreLocation.CurrentUser);
 
     x509Store.Open(OpenFlags.ReadOnly);
 

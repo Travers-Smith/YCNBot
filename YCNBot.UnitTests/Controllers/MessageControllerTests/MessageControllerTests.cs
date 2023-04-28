@@ -19,6 +19,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             var identityService = new Mock<IIdentityService>();
             var messageService = new Mock<IMessageService>();
             var chatModelPicker = new Mock<IChatModelPickerService>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
 
             string chatGptMessage = "test message content";
 
@@ -32,7 +33,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             configuration.Setup(config => config["AllowPersonalMode"]).Returns("true");
 
             IActionResult result = await new MessageController(chatService.Object, chatModelPicker.Object,
-                configuration.Object, identityService.Object, messageService.Object)
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object)
                 .AddNonRecordedChat(new AddNonRecordedMessageModel[]
                 {
                     new AddNonRecordedMessageModel
@@ -60,6 +61,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             var identityService = new Mock<IIdentityService>();
             var messageService = new Mock<IMessageService>();
             var chatModelPicker = new Mock<IChatModelPickerService>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
 
             configuration.Setup(config => config["AllowPersonalMode"]).Returns("false");
 
@@ -68,7 +70,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             identityService.Setup(x => x.IsAuthenticated()).Returns(true);
 
             IActionResult result = await new MessageController(chatService.Object, chatModelPicker.Object,
-                configuration.Object, identityService.Object, messageService.Object)
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object)
                 .AddNonRecordedChat(new AddNonRecordedMessageModel[]
                 {
                     new AddNonRecordedMessageModel
@@ -90,6 +92,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             var identityService = new Mock<IIdentityService>();
             var messageService = new Mock<IMessageService>();
             var chatModelPicker = new Mock<IChatModelPickerService>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
 
             string chatGptMessage = "test message content";
 
@@ -101,7 +104,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             configuration.Setup(config => config["AllowPersonalMode"]).Returns("true");
 
             IActionResult result = await new MessageController(chatService.Object, chatModelPicker.Object,
-                configuration.Object, identityService.Object, messageService.Object)
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object)
                 .AddNonRecordedChat(new AddNonRecordedMessageModel[]
                 {
                     new AddNonRecordedMessageModel
@@ -128,6 +131,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             var identityService = new Mock<IIdentityService>();
             var messageService = new Mock<IMessageService>();
             var chatModelPicker = new Mock<IChatModelPickerService>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
 
             configuration.Setup(config => config["AllowPersonalMode"]).Returns("true");
             chatModelPicker.Setup(x => x.GetModel(It.IsAny<string>())).Returns(chatCompletionService.Object);
@@ -137,7 +141,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             identityService.Setup(x => x.IsAuthenticated()).Returns(true);
 
             MessageController controller = new MessageController(chatService.Object, chatModelPicker.Object,
-                configuration.Object, identityService.Object, messageService.Object);
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
             await Assert.ThrowsAsync<Exception>(() => controller.AddNonRecordedChat(new AddNonRecordedMessageModel[]
             {
@@ -158,6 +162,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             var identityService = new Mock<IIdentityService>();
             var messageService = new Mock<IMessageService>();
             var chatModelPicker = new Mock<IChatModelPickerService>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
 
             configuration.Setup(config => config["AllowPersonalMode"]).Returns("true");
 
@@ -166,7 +171,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             identityService.Setup(x => x.IsAuthenticated()).Returns(false);
 
             IActionResult result = await new MessageController(chatService.Object, chatModelPicker.Object,
-                configuration.Object, identityService.Object, messageService.Object)
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object)
                 .AddNonRecordedChat(new AddNonRecordedMessageModel[]
                 {
                     new AddNonRecordedMessageModel
@@ -187,6 +192,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             var identityService = new Mock<IIdentityService>();
             var messageService = new Mock<IMessageService>();
             var chatModelPicker = new Mock<IChatModelPickerService>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
 
             Guid userIdentifier = Guid.NewGuid();
 
@@ -201,7 +207,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             identityService.Setup(x => x.GetUserIdentifier()).Returns(userIdentifier);
 
             IActionResult result = await new MessageController(chatService.Object, chatModelPicker.Object,
-                configuration.Object, identityService.Object, messageService.Object)
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object)
                 .ChangeMessageRating(new UpdateMessageRatingModel
                 {
                     MessageIdentifier = Guid.NewGuid(),
@@ -219,6 +225,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             var identityService = new Mock<IIdentityService>();
             var messageService = new Mock<IMessageService>();
             var chatModelPicker = new Mock<IChatModelPickerService>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
 
             Guid userIdentifier = Guid.NewGuid();
 
@@ -233,7 +240,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             identityService.Setup(x => x.GetUserIdentifier()).Returns(userIdentifier);
 
             IActionResult result = await new MessageController(chatService.Object, chatModelPicker.Object,
-                configuration.Object, identityService.Object, messageService.Object)
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object)
                 .ChangeMessageRating(new UpdateMessageRatingModel
                 {
                     MessageIdentifier = Guid.NewGuid(),
@@ -253,6 +260,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             var identityService = new Mock<IIdentityService>();
             var messageService = new Mock<IMessageService>();
             var chatModelPicker = new Mock<IChatModelPickerService>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
 
             Guid userIdentifier = Guid.NewGuid();
 
@@ -267,7 +275,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             identityService.Setup(x => x.GetUserIdentifier()).Returns(userIdentifier);
 
             IActionResult result = await new MessageController(chatService.Object, chatModelPicker.Object,
-                configuration.Object, identityService.Object, messageService.Object)
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object)
                 .ChangeMessageRating(new UpdateMessageRatingModel
                 {
                     MessageIdentifier = Guid.NewGuid(),
@@ -285,6 +293,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             var identityService = new Mock<IIdentityService>();
             var messageService = new Mock<IMessageService>();
             var chatModelPicker = new Mock<IChatModelPickerService>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
 
             Guid userIdentifier = Guid.NewGuid();
 
@@ -299,7 +308,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             identityService.Setup(x => x.GetUserIdentifier()).Returns(userIdentifier);
 
             IActionResult result = await new MessageController(chatService.Object, chatModelPicker.Object,
-                configuration.Object, identityService.Object, messageService.Object)
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object)
                 .ChangeMessageRating(new UpdateMessageRatingModel
                 {
                     MessageIdentifier = Guid.NewGuid(),
@@ -317,6 +326,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             var identityService = new Mock<IIdentityService>();
             var messageService = new Mock<IMessageService>();
             var chatModelPicker = new Mock<IChatModelPickerService>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
 
             Guid userIdentifier = Guid.NewGuid();
 
@@ -333,8 +343,8 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             messageService.Setup(x => x.Update(It.IsAny<Message>())).ThrowsAsync(new Exception());
 
 
-            MessageController controller = new (chatService.Object, chatModelPicker.Object,
-                configuration.Object, identityService.Object, messageService.Object);
+            MessageController controller = new MessageController(chatService.Object, chatModelPicker.Object,
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
 
             await Assert.ThrowsAsync<Exception>(() => controller.ChangeMessageRating(new UpdateMessageRatingModel

@@ -1,0 +1,68 @@
+.userReportContainer{
+    padding: 20px 50px;
+    width: 100%;
+}
+
+.dark {
+    background-color: #28292d;
+}
+
+.dark h4{
+    color: white;
+}
+
+.dark button {
+    color: white;
+}
+
+.dark table {
+    background-color: #606169 !important;
+    color: white;
+}
+
+.dark th {
+    background-color: #414249 !important;
+}
+
+.userReport {
+    height: 90vh;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.userReportContainer table {
+    border-collapse: collapse;
+    width: 100%;
+    background-color: white;
+}
+
+.showMoreContainer {
+    text-align: center;
+}
+
+.userReportContainer table th {
+    background-color: rgb(240, 240, 240);
+    padding: 10px;
+}
+
+.userReportContainer table td {
+    padding: 10px;
+}
+
+.userReportContainer tr {
+    border-bottom: 1px solid lightgrey;
+    height: 50px;
+}
+
+.loadingContainer {
+    text-align: center;
+    width: 100%;
+}
+
+.darkProgress {
+    color: #FFF !important;
+}
+
+.lightProgress {
+    color: #343541 !important;
+}

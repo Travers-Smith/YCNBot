@@ -30,7 +30,8 @@ namespace YCNBot.Controllers
             UserModel user = new()
             {
                 AgreedToTerms = await _userAgreedTermsService.CheckAgreed(userIdentifier.Value),
-                Email = _identityService.GetEmail()
+                Email = _identityService.GetEmail(),
+                IsAdmin = _identityService.IsAdmin()
             };
 
             string? name = _identityService.GetName();

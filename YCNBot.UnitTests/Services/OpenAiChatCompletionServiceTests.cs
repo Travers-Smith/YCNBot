@@ -33,7 +33,21 @@ namespace YCNBot.UnitTest.Services
                 .Setup(x => x.OpenAIChatCompletion.CompleteChat(It.IsAny<AddChatCompletionServiceModel>()))
                 .ReturnsAsync(chatCompletion);
 
-            string result = await new OpenAIChatCompletionService(mock.Object).AddChatCompletion(new List<Message>(), "modelname");
+            string result = await new OpenAIChatCompletionService(mock.Object).AddChatCompletion(
+                new List<Message>
+                {
+                    new Message
+                    {
+                        Text = "Test message",
+                        IsSystem = false,
+                    },
+                    new Message
+                    {
+                        Text = "Test response",
+                        IsSystem = true,
+                    }
+                }, 
+                "modelname");
 
             Assert.Equal(result, completedMessage);
         }

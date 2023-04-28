@@ -32,8 +32,8 @@ const RecordChat = ({ show, setShow, setRecordChat }) => {
                     <DialogContentText
                         color="red"
                     >
-                        Due to ongoing concerns with privacy regulators we have temporarily blocked personal use of 
-                        {config.APP_NAME}. We’ll reenable this as and when the privacy regulators update on their position.
+                        Due to ongoing concerns with privacy regulators we have temporarily blocked personal use of  {config.APP_NAME}. 
+                        We’ll re-enable this as and when the privacy regulators update on their position.
                     </DialogContentText>
             }
             </DialogContent>

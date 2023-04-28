@@ -1,5 +1,5 @@
 .chatHistory{
-    height: 60vh;
+    height: 50vh;
     overflow-y: auto;
     margin-top: 50px;
 }

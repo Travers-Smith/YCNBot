@@ -12,7 +12,8 @@ const Message = ({ data, recordChat }) => {
         rating,
         text,
         uniqueIdentifier,
-        isError
+        isError,
+        isPiError
     } = data;
 
     const {
@@ -41,7 +42,7 @@ const Message = ({ data, recordChat }) => {
                     <Avatar/>
                 :
                     <Avatar>
-                        {user.firstName?.charAt(0)}{user.lastName?.charAt(0)}
+                        {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
                     </Avatar>
             }
             <div className={classes.messageBody}>
@@ -66,7 +67,12 @@ const Message = ({ data, recordChat }) => {
                                                 color="danger"
                                             />
                                             <div>
-                                                I'm unable to talk right now, please try again later!
+                                                {
+                                                    isPiError ?
+                                                        "There was personal information in this message"
+                                                    :
+                                                        "I'm unable to talk right now, please try again later!"
+                                                }
                                             </div>
                                         </div>
                                              

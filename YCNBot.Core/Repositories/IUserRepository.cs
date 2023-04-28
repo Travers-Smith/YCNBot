@@ -1,7 +1,11 @@
-﻿namespace YCNBot.Core.Repositories
+﻿using YCNBot.Core.Entities;
+
+namespace YCNBot.Core.Repositories
 {
     public interface IUserRepository
     {
-        Task<Stream?> GetUserInformation(string emailAddress);
+        Task<User?> GetUserDetails(Guid id);
+
+        Task<IEnumerable<User>?> GetUserDetails(IEnumerable<Guid> ids);
     }
 }

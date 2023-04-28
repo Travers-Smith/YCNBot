@@ -16,20 +16,28 @@ namespace YCNBot.Controllers
         private readonly IConfiguration _configuration;
         private readonly IIdentityService _identityService;
         private readonly IMessageService _messageService;
+        private readonly IPersonalInformationCheckerService _personalInformationCheckerService;
 
         public MessageController(IChatService chatService, IChatModelPickerService chatModelPickerService,
-            IConfiguration configuration, IIdentityService identityService, IMessageService messageService)
+            IConfiguration configuration, IIdentityService identityService, IMessageService messageService, 
+            IPersonalInformationCheckerService personalInformationCheckerService)
         {
+            _chatModelPickerService = chatModelPickerService;
             _chatService = chatService;
             _messageService = messageService;
             _configuration = configuration;
             _identityService = identityService;
-            _chatModelPickerService = chatModelPickerService;
+            _personalInformationCheckerService = personalInformationCheckerService;
         }
 
         [HttpPost("add-recorded-message")]
         public async Task<IActionResult> AddRecordedChat(AddMessageModel message)
         {
+            if (_personalInformationCheckerService.CheckIfStringHasNames(message.Message))
+            {
+                return BadRequest("contains personal information");
+            }
+
             List<Message> newMessages = new ();
 
             Message newMessage = new ()
@@ -81,6 +89,11 @@ namespace YCNBot.Controllers
 
             string systemMessage = await chatCompletionService
                 .AddChatCompletion(chat.Messages.Concat(newMessages), _configuration["ChatModel"] ?? "");
+
+            if (_personalInformationCheckerService.CheckIfStringHasNames(systemMessage))
+            {
+                return BadRequest("contains personal information");
+            }
 
             newMessages.Add(new Message
             {

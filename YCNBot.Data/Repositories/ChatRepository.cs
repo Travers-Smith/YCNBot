@@ -33,5 +33,12 @@ namespace YCNBot.Data.Repositories
                 .Include(x => x.Messages)
                 .FirstAsync();
         }
+
+        public async Task<Dictionary<Guid, int>> GetUsersUsage(int skip, int take)
+        {
+            return await _context.Chats
+                .GroupBy(x => x.UserIdentifier)
+                .ToDictionaryAsync(x => x.Key, x => x.Count());
+        }
     }
 }

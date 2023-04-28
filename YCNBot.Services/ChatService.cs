@@ -35,6 +35,11 @@ namespace YCNBot.Services
             return await _unitOfWork.Chat.GetByUniqueIdentifierWithMessages(uniqueIdentifier);
         }
 
+        public async Task<Dictionary<Guid, int>> GetUsersUsage(int skip, int take)
+        {
+            return await _unitOfWork.Chat.GetUsersUsage(skip, take);
+        }
+
         public async Task Update(Chat chat)
         {
             _unitOfWork.Chat.Update(chat);

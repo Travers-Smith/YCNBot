@@ -1,13 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using YCNBot.Controllers;
+using YCNBot.Core.Entities;
 using YCNBot.Core.Services;
-using YCNBot.Entities;
 
 namespace YCNBot.UnitTest.Controllers.UserAgreedTermsControllerTests
 {
     public class UserAgreedTermsControllerTests
     {
+        [Fact]
+        public async Task AcceptTerms_NoUser_ReturnsUnauthorizedResult()
+        {
+            var mockUserAgreedTermsService = new Mock<IUserAgreedTermsService>();
+
+            var mockIdentityService = new Mock<IIdentityService>();
+
+            Assert.IsType<UnauthorizedResult>(await new UserAgreedTermsController(mockIdentityService.Object, mockUserAgreedTermsService.Object)
+                .AcceptTerms());
+        }
+
         [Fact]
         public async Task AcceptTerms_AddsAgreedTerms_ReturnSuccessCode()
         {
