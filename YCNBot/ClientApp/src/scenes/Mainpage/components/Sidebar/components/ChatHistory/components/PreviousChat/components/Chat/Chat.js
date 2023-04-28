@@ -17,14 +17,14 @@ const Chat = ({
 }) => {
     return (
         <>
-            <Link to={"/chat/" + previousChatIdentifier}>
+            <a href={"/chat/" + previousChatIdentifier}>
                 <ChatBubbleOutlineIcon
                     fontSize="small"
                 />
                 <div className={classes.text}>
                     {data.name}
                 </div>
-            </Link>
+            </a>
             {
                 !edit &&
                     <div className={classes.rightSide}>

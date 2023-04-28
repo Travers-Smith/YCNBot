@@ -15,7 +15,7 @@ namespace YCNBot.Controllers
         private readonly IClaimsTransformation _agreedToTermsClaimTransformation;
         private readonly IUserAgreedTermsService _userAgreedTermsService;
 
-        public AuthenticationController(IClaimsTransformation agreedToTermsClaimTranformation, IIdentityService identityService, 
+        public AuthenticationController(IClaimsTransformation agreedToTermsClaimTranformation, IIdentityService identityService,
             IUserAgreedTermsService userAgreedTermsService)
         {
             _identityService = identityService;
@@ -35,9 +35,9 @@ namespace YCNBot.Controllers
         {
             Guid? userIdentifier = _identityService.GetUserIdentifier();
 
-            if(userIdentifier != null && await _userAgreedTermsService.CheckAgreed(userIdentifier.Value))
+            if (userIdentifier != null && await _userAgreedTermsService.CheckAgreed(userIdentifier.Value))
             {
-                await _agreedToTermsClaimTransformation.TransformAsync(User);               
+                await _agreedToTermsClaimTransformation.TransformAsync(User);
             }
 
             return Redirect("/chat");

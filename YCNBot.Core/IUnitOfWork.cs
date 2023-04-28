@@ -1,4 +1,5 @@
-﻿using YCNBot.Core.Repositories;
+﻿using YCNBot.Core.Entities;
+using YCNBot.Core.Repositories;
 
 namespace YCNBot.Core
 {
@@ -12,7 +13,15 @@ namespace YCNBot.Core
 
         IMessageRepository Message { get; }
 
+        INameRepository Name { get; }
+
+        IStopWordRepository StopWord { get; }
+
+        IUserRepository User { get; }
+
         IUserAgreedTermsRepository UserAgreedTerms { get; }
+
+        IRepository<UserFeedback> UserFeedback { get; }
 
         void Commit();
 

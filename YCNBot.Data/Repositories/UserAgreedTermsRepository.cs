@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using YCNBot.Core.Entities;
 using YCNBot.Core.Repositories;
-using YCNBot.Entities;
 
 namespace YCNBot.Data.Repositories
 {

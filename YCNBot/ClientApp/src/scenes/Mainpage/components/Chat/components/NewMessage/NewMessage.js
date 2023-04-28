@@ -115,7 +115,8 @@ const NewMessage = ({
                     ...chat.messages.filter(message => !message.pending),
                     {
                         isSystem: true,
-                        isError: true
+                        isError: true,
+                        isPiError: response.errorMessage === "contains personal information"
                     }
                 ]
             }))

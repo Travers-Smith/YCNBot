@@ -1,7 +1,9 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net.Http.Headers;
 
 namespace YCNBot.MessageHandlers
 {
+    [ExcludeFromCodeCoverage]
     public class OpenAIClientHandler : DelegatingHandler
     {
         private readonly IConfiguration _configuration;
@@ -13,7 +15,7 @@ namespace YCNBot.MessageHandlers
 
         protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _configuration["OpenAIKey"]);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _configuration["OpenAiKey"]);
 
             return await base.SendAsync(request, cancellationToken);
         }

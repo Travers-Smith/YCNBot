@@ -1,6 +1,6 @@
 ﻿using YCNBot.Core;
+using YCNBot.Core.Entities;
 using YCNBot.Core.Services;
-using YCNBot.Entities;
 
 namespace YCNBot.Services
 {

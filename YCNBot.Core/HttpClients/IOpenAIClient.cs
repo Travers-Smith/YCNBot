@@ -2,7 +2,7 @@
 
 namespace YCNBot.Core.HttpClients
 {
-    public interface IOpenAIClient
+    public interface IOpenAiClient
     {
         Task<HttpResponseMessage> AddChatCompletion(AddChatCompletionServiceModel content);
     }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using YCNBot.Core.Entities;
 using YCNBot.Core.Services;
-using YCNBot.Entities;
 
 namespace YCNBot.Controllers
 {

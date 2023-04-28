@@ -1,4 +1,4 @@
-﻿namespace YCNBot.Entities;
+﻿namespace YCNBot.Core.Entities;
 
 public partial class UserAgreedTerms
 {

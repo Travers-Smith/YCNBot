@@ -21,11 +21,13 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             var configuration = new Mock<IConfiguration>();
 
             var chatModelPicker = new Mock<IChatModelPickerService>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
+
 
             chatModelPicker.Setup(x => x.GetModel(It.IsAny<string>()));
 
             var controller = new MessageController(chatService.Object, chatModelPicker.Object,
-                configuration.Object, identityService.Object, messageService.Object);
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
 
             Guid userIdentifier = Guid.NewGuid();
@@ -66,11 +68,12 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             var identityService = new Mock<IIdentityService>();
             var configuration = new Mock<IConfiguration>();
             var chatModelPicker = new Mock<IChatModelPickerService>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
 
             chatModelPicker.Setup(x => x.GetModel(It.IsAny<string>())).Returns(chatCompletionService.Object);
 
             var controller = new MessageController(chatService.Object, chatModelPicker.Object,
-                configuration.Object, identityService.Object, messageService.Object);
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
             Guid userIdentifier = Guid.NewGuid();
 
@@ -103,11 +106,12 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             var configuration = new Mock<IConfiguration>();
 
             var chatModelPicker = new Mock<IChatModelPickerService>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
 
             chatModelPicker.Setup(x => x.GetModel(It.IsAny<string>())).Returns(chatCompletionService.Object);
 
             var controller = new MessageController(chatService.Object, chatModelPicker.Object,
-                configuration.Object, identityService.Object, messageService.Object);
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
             Guid userIdentifier = Guid.NewGuid();
 
@@ -120,6 +124,10 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
                 });
 
             chatCompletionService.Setup(x => x.AddChatCompletion(It.IsAny<IEnumerable<Message>>(), It.IsAny<string>())).ReturnsAsync("new message");
+
+            personalInformationCheckerService
+              .Setup(x => x.CheckIfStringHasNames(It.IsAny<string>()))
+              .Returns(false);
 
             await controller.AddRecordedChat(new AddMessageModel
             {
@@ -140,11 +148,12 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             var configuration = new Mock<IConfiguration>();
 
             var chatModelPicker = new Mock<IChatModelPickerService>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
 
             chatModelPicker.Setup(x => x.GetModel(It.IsAny<string>())).Returns(chatCompletionService.Object);
 
             var controller = new MessageController(chatService.Object, chatModelPicker.Object,
-                configuration.Object, identityService.Object, messageService.Object);
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
             Guid userIdentifier = Guid.NewGuid();
 
@@ -177,9 +186,10 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
 
             var chatModelPicker = new Mock<IChatModelPickerService>();
             chatModelPicker.Setup(x => x.GetModel(It.IsAny<string>())).Returns(chatCompletionService.Object);
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
 
             var controller = new MessageController(chatService.Object, chatModelPicker.Object,
-                configuration.Object, identityService.Object, messageService.Object);
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
 
             Guid chatIdentifier = Guid.NewGuid();
@@ -216,12 +226,16 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             var configuration = new Mock<IConfiguration>();
 
             var chatModelPicker = new Mock<IChatModelPickerService>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
 
             chatModelPicker.Setup(x => x.GetModel(It.IsAny<string>())).Returns(chatCompletionService.Object);
 
-            var controller = new MessageController(chatService.Object, chatModelPicker.Object,
-                configuration.Object, identityService.Object, messageService.Object);
+            personalInformationCheckerService
+              .Setup(x => x.CheckIfStringHasNames(It.IsAny<string>()))
+              .Returns(false);
 
+            var controller = new MessageController(chatService.Object, chatModelPicker.Object,
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
             Guid userIdentifier = Guid.NewGuid();
 
@@ -237,7 +251,9 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
 
             string assistantTextResponse = "test message content";
 
-            chatCompletionService.Setup(x => x.AddChatCompletion(It.IsAny<IEnumerable<Message>>(), It.IsAny<string>())).ReturnsAsync(assistantTextResponse);
+            chatCompletionService
+                .Setup(x => x.AddChatCompletion(It.IsAny<IEnumerable<Message>>(), It.IsAny<string>()))
+                .ReturnsAsync(assistantTextResponse);
 
             var result = await controller.AddRecordedChat(new AddMessageModel
             {
@@ -251,6 +267,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
                 var dataResult = Assert.IsType<MessageModel>(actionResult.Value);
                 Assert.Equal(dataResult.Chat.UniqueIdentifier, chat.UniqueIdentifier);
                 Assert.Equal(dataResult.Text, assistantTextResponse);
+                Assert.True(dataResult.IsSystem);
             });
         }
 
@@ -264,11 +281,16 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             var configuration = new Mock<IConfiguration>();
 
             var chatModelPicker = new Mock<IChatModelPickerService>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
+
+            personalInformationCheckerService
+                .Setup(x => x.CheckIfStringHasNames(It.IsAny<string>()))
+                .Returns(false);
 
             chatModelPicker.Setup(x => x.GetModel(It.IsAny<string>())).Returns(chatCompletionService.Object);
 
             var controller = new MessageController(chatService.Object, chatModelPicker.Object,
-                configuration.Object, identityService.Object, messageService.Object);
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
 
             Guid chatIdentifier = Guid.NewGuid();
@@ -283,7 +305,9 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
                     UserIdentifier = Guid.NewGuid(),
                 });
 
-            chatCompletionService.Setup(x => x.AddChatCompletion(It.IsAny<IEnumerable<Message>>(), It.IsAny<string>())).ReturnsAsync("new message");
+            chatCompletionService
+                .Setup(x => x.AddChatCompletion(It.IsAny<IEnumerable<Message>>(), It.IsAny<string>()))
+                .ReturnsAsync("new message");
 
             var result = await controller.AddRecordedChat(new AddMessageModel
             {
@@ -302,13 +326,18 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             var messageService = new Mock<IMessageService>();
             var identityService = new Mock<IIdentityService>();
             var configuration = new Mock<IConfiguration>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
 
             var chatModelPicker = new Mock<IChatModelPickerService>();
+
             chatModelPicker.Setup(x => x.GetModel(It.IsAny<string>())).Returns(chatCompletionService.Object);
 
-            var controller = new MessageController(chatService.Object, chatModelPicker.Object,
-                configuration.Object, identityService.Object, messageService.Object);
+            personalInformationCheckerService
+                .Setup(x => x.CheckIfStringHasNames(It.IsAny<string>()))
+                .Returns(false);
 
+            var controller = new MessageController(chatService.Object, chatModelPicker.Object,
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
             Guid chatIdentifier = Guid.NewGuid();
             Guid userIdentifier = Guid.NewGuid();
@@ -322,7 +351,9 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
                     UserIdentifier = userIdentifier,
                 });
 
-            chatCompletionService.Setup(x => x.AddChatCompletion(It.IsAny<IEnumerable<Message>>(), It.IsAny<string>())).ReturnsAsync("new message");
+            chatCompletionService
+                .Setup(x => x.AddChatCompletion(It.IsAny<IEnumerable<Message>>(), It.IsAny<string>()))
+                .ReturnsAsync("new message");
 
             messageService
                 .Setup(x => x.AddRange(It.IsAny<IEnumerable<Message>>()))
@@ -332,6 +363,70 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             {
                 Message = "I am a test"
             }));
+        }
+
+        [Fact]
+        public async Task AddRecordedMessage_UserMessageContainsName_BadRequestObjectResult()
+        {
+            var chatService = new Mock<IChatService>();
+            var chatCompletionService = new Mock<IChatCompletionService>();
+            var messageService = new Mock<IMessageService>();
+            var identityService = new Mock<IIdentityService>();
+            var configuration = new Mock<IConfiguration>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
+
+            var chatModelPicker = new Mock<IChatModelPickerService>();
+
+            chatModelPicker.Setup(x => x.GetModel(It.IsAny<string>())).Returns(chatCompletionService.Object);
+
+            string messageText = "This is a test Sam";
+
+            personalInformationCheckerService
+                .Setup(pis => pis.CheckIfStringHasNames(messageText))
+                .Returns(true);
+
+            var controller = new MessageController(chatService.Object, chatModelPicker.Object,
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
+
+            var result = await controller.AddRecordedChat(new AddMessageModel()
+            {
+                Message = messageText
+            });
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task AddRecordedMessage_SystemMessageContainsName_BadRequestObjectResult()
+        {
+            var chatService = new Mock<IChatService>();
+            var chatCompletionService = new Mock<IChatCompletionService>();
+            var messageService = new Mock<IMessageService>();
+            var identityService = new Mock<IIdentityService>();
+            var configuration = new Mock<IConfiguration>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
+
+            var chatModelPicker = new Mock<IChatModelPickerService>();
+
+            chatModelPicker.Setup(x => x.GetModel(It.IsAny<string>())).Returns(chatCompletionService.Object);
+
+            string messageText = "This is a system response Sam";
+
+            chatCompletionService
+                .Setup(ccs => ccs.AddChatCompletion(It.IsAny<IEnumerable<Message>>(), It.IsAny<string>()))
+                .ReturnsAsync(messageText);
+
+            personalInformationCheckerService.Setup(pis => pis.CheckIfStringHasNames(messageText)).Returns(true);
+
+            var controller = new MessageController(chatService.Object, chatModelPicker.Object,
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
+
+            var result = await controller.AddRecordedChat(new AddMessageModel()
+            {
+                Message = messageText
+            });
+
+            Assert.IsType<BadRequestObjectResult>(result);
         }
     }
 }

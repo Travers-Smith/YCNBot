@@ -11,7 +11,7 @@ import {
     DialogTitle } from "@mui/material";
 import config from "../../../../config.json";
 
-const AcceptTermsDialog = ({ open, setOpen }) => {
+const AcceptTermsDialog = ({ open, setUserAgreedToTerms }) => {
     const [{ isLoading, isError }, safeFetch] = useSafeDataFetch();
     
     const {
@@ -24,13 +24,13 @@ const AcceptTermsDialog = ({ open, setOpen }) => {
             method: "POST"
         });
 
+        setUserAgreedToTerms(true)
+
         if(!response.isError) {
             setUser(user => ({
                 ...user,
                 agreedToTerms: true
-            }));
-            
-            setOpen(false);
+            }));            
         }
     };
 
@@ -40,15 +40,30 @@ const AcceptTermsDialog = ({ open, setOpen }) => {
         >
             <DialogTitle>Accept Terms</DialogTitle>
             <DialogContent>
-                <ul>
-                    <DialogContentText>
-                        {
-                            config.COMPANY_TERMS?.map((term, index) => (
-                                <li key={index}>{term}</li>
-                            ))
-                        }
-                    </DialogContentText>
-                </ul>
+                <div>
+                    <h6>Input</h6>
+                    <ul>
+                        <DialogContentText>
+                            {
+                                config.COMPANY_INPUT_TERMS.map((term, index) => (
+                                    <li key={index}>{term}</li>
+                                ))
+                            }
+                        </DialogContentText>
+                    </ul>
+                </div>
+                <div>
+                    <h6>Output</h6>
+                    <ul>
+                        <DialogContentText>
+                            {
+                                config.COMPANY_OUTPUT_TERMS.map((term, index) => (
+                                    <li key={index}>{term}</li>
+                                ))
+                            }
+                        </DialogContentText>
+                    </ul>
+                </div>
             {
                 isError &&
                     <>

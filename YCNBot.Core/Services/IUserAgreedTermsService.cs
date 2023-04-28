@@ -1,4 +1,4 @@
-﻿using YCNBot.Entities;
+﻿using YCNBot.Core.Entities;
 
 namespace YCNBot.Core.Services
 {

@@ -4,13 +4,14 @@ import GlobalContext from "./context/GlobalContext";
 import useSafeDataFetch from "./hooks/useSafeDataFetch";
 import Login from "./scenes/Login/Login";
 import Mainpage from "./scenes/Mainpage/Mainpage";
+import UserReport from "./scenes/Mainpage/components/UserReport/UserReport";
 
-const LawBot = () => {
+const YCNBot = () => {
     const [darkMode, setDarkMode] = useState(sessionStorage.getItem("darkMode") === "true");
     const safeDataFetch = useSafeDataFetch()[1];
+    const navigate = useNavigate();
     const [checkedLoggedIn, setCheckedLoggedIn] = useState(false);
     const [user, setUser] = useState(null);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -48,10 +49,14 @@ const LawBot = () => {
                 <Route path="/chat">
                     <Route path="" element={<Mainpage/>}/>
                     <Route path=":chatIdentifier" element={<Mainpage/>}/>
+                    {
+                        user?.isAdmin &&
+                            <Route path="user-usage" element={<UserReport/>}/>
+                    }
                 </Route>
             </Routes>
         </GlobalContext.Provider>
     )
 };
 
-export default LawBot;
+export default YCNBot;

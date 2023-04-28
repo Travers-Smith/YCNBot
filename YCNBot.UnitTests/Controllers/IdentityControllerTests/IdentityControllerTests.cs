@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using YCNBot.Core.Services;
-using YCNBot.Entities;
 using YCNBot.Models;
 using YCNBot.Controllers;
+using YCNBot.Core.Entities;
 
 namespace YCNBot.UnitTest.Controllers.IdentityControllerTests
 {

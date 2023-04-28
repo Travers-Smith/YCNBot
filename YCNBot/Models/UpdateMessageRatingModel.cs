@@ -4,6 +4,6 @@
     {
         public Guid MessageIdentifier { get; set; }
 
-        public int? Rating { get; set; }
+        public int Rating { get; set; }
     }
 }

@@ -8,6 +8,9 @@
 
         Guid? GetUserIdentifier();
 
+        bool IsAdmin();
+
         bool IsAuthenticated();
+
     }
 }

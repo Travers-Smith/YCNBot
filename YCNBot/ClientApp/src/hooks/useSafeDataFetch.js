@@ -13,7 +13,7 @@ const useSafeDataFetch = () => {
     const fetchData = async ({ data, method, params, url }) => {
         dispatch({ type: "INIT" });
 
-        try{
+        try{      
             const { data: responseData } = await axios({
                 data: data,
                 method: method,
@@ -29,11 +29,11 @@ const useSafeDataFetch = () => {
                 isError: false
             };
 
-        } catch{
+        } catch(e) {
             dispatch({ type: "FAILURE" });
-
             return {
-                isError: true
+                isError: true,
+                errorMessage: e?.response?.data
             }
         }
     }

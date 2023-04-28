@@ -4,7 +4,7 @@ import ChatHistory from "./components/ChatHistory/ChatHistory";
 import NewChat from "./components/NewChat/NewChat";
 import classes from "./Sidebar.module.css";
 
-const Sidebar = ({ previousChats, setPreviousChats, chat }) => {
+const Sidebar = ({ previousChats, setPreviousChats, setShowUserReport, chat }) => {
     return (
         <div className={classes.sidebar}>
             <NewChat/>
@@ -13,7 +13,9 @@ const Sidebar = ({ previousChats, setPreviousChats, chat }) => {
                 previousChats={previousChats}
                 setPreviousChats={setPreviousChats}
             />
-            <BottomSection/>
+            <BottomSection
+                setShowUserReport={setShowUserReport}
+            />
         </div>
     );
 };
