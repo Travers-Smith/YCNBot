@@ -26,11 +26,14 @@ namespace YCNBot.Services
 
             foreach (string word in filteredWords)
             {
-                foreach(string? name in _unitOfWork.Name.GetNames(word.First(), word.Last(), word.Length))
+                if (!string.IsNullOrEmpty(word))
                 {
-                    if (name.ToLower() == word)
+                    foreach(string? name in _unitOfWork.Name.GetNames(word.First(), word.Last(), word.Length))
                     {
-                        return true;
+                        if (name.ToLower() == word)
+                        {
+                            return true;
+                        }
                     }
                 }
             }
