@@ -51,7 +51,7 @@ namespace YCNBot.UnitTest.Controllers.ChatControllerTests
 
             Guid chatIdentifier = Guid.NewGuid();
 
-            List<Chat> results = new ()
+            List<Chat> results = new()
             {
                 new Chat()
                 {

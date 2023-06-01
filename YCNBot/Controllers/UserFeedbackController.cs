@@ -18,7 +18,7 @@ namespace YCNBot.Controllers
             _userFeedbackService = userFeedbackService;
         }
 
-        [HttpPost("add")] 
+        [HttpPost("add")]
         public async Task<IActionResult> Add(AddUserFeedbackModel addUserFeedback)
         {
             Guid? userIdentifier = _identityService.GetUserIdentifier();

@@ -2,8 +2,8 @@
 
 namespace YCNBot.Core.Repositories
 {
-    public interface IUserAgreedTermsRepository : IRepository<UserAgreedTerms>
+    public interface IUserAgreedTermsRepository : IRepository<UserAgreedTerm>
     {
-        Task<UserAgreedTerms?> GetByUser(Guid userIdentifier);
+        Task<UserAgreedTerm?> GetByUser(Guid userIdentifier);
     }
 }

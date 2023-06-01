@@ -1,0 +1,5 @@
+.analytics {
+    display: flex;
+    column-gap: 30px;
+    max-height: 60vh;
+}

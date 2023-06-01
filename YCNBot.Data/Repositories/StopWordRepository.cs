@@ -14,7 +14,7 @@ namespace YCNBot.Data.Repositories
 
         public HashSet<string> GetAllStopwords()
         {
-            string? stopWordFilepath = _configuration["StopWordsFilepath"] ?? 
+            string? stopWordFilepath = _configuration["StopWordsFilepath"] ??
                 throw new Exception("Invalid stopword filepath");
 
             return new HashSet<string>(File.ReadAllLines(stopWordFilepath));

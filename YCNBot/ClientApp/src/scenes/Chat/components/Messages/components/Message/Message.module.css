@@ -1,0 +1,56 @@
+.message {
+    width: 100%;
+    padding: 30px 150px;
+    display: flex;
+}
+
+.error{
+    color: red;
+    display: flex;
+}
+
+.error svg {
+    margin-right: 10px;
+}
+
+.loading {
+    margin: 5px 0px 0px 10px;
+    width: 10px;
+    height: 20px;
+}
+
+.loadingDark {
+    background-color: white;
+}
+
+.loadingWhite {
+    background-color: black;
+}
+
+.messageBody {
+    padding: 5px 0px 0px 20px;
+    width: 100%;
+}
+
+.systemLight {
+    background-color: #F7F7F8;
+    border-top: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+}
+
+.systemDark {
+    background-color: #444654;
+    color: white;
+    border-top: 1px solid black;
+    border-bottom: 1px solid rgba(32, 33, 35, .5);
+}
+
+.userLight {
+    background-color: #FFF;
+    color: black;
+}
+
+.userDark {
+    background-color: #343541;
+    color: white;
+}

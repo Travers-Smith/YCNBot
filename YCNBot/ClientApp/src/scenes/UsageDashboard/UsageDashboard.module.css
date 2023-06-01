@@ -1,0 +1,10 @@
+.usageDashboard {
+    overflow-y: hidden;
+    padding: 20px;
+    width: 100%;
+}
+
+.heading {
+    border-bottom: 1px solid lightgrey;
+    margin-bottom: 40px;
+}

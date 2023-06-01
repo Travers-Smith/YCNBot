@@ -1,0 +1,26 @@
+.examples {
+    display: grid;
+    column-gap: 30px;
+    justify-content: center;
+    grid-template-columns: 1fr 1fr 1fr;
+    overflow-y: scroll;
+    max-height: 60vh;
+    padding-right: 10px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.dark {
+    color: white !important; 
+}
+
+.dark:disabled {
+    opacity: 0.5;
+}
+
+.pagination {
+    text-align: center;
+}

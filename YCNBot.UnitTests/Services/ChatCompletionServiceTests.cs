@@ -1,9 +1,4 @@
 ﻿using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YCNBot.Core;
 using YCNBot.Core.Services;
 using YCNBot.Services;
@@ -15,9 +10,9 @@ namespace YCNBot.UnitTest.Services
         [Fact]
         public void GetModel_OpenAI_ReturnsIChatService()
         {
-            Mock<IUnitOfWork> unitOfWork = new ();
+            Mock<IUnitOfWork> unitOfWork = new();
 
-            Assert.IsType<OpenAIChatCompletionService>(new ChatModelPickerService(new List<IChatCompletionService>() { 
+            Assert.IsType<OpenAIChatCompletionService>(new ChatModelPickerService(new List<IChatCompletionService>() {
                 new OpenAIChatCompletionService(unitOfWork.Object)
             })
                 .GetModel("OpenAI"));

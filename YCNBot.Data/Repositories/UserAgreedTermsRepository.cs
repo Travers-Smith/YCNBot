@@ -4,11 +4,11 @@ using YCNBot.Core.Repositories;
 
 namespace YCNBot.Data.Repositories
 {
-    public class UserAgreedTermsRepository : Repository<UserAgreedTerms>, IUserAgreedTermsRepository
+    public class UserAgreedTermsRepository : Repository<UserAgreedTerm>, IUserAgreedTermsRepository
     {
         public UserAgreedTermsRepository(YCNBotContext context) : base(context) { }
 
-        public async Task<UserAgreedTerms?> GetByUser(Guid userIdentifier)
+        public async Task<UserAgreedTerm?> GetByUser(Guid userIdentifier)
         {
             return await _context.UserAgreedTerms
                 .FirstOrDefaultAsync(x => x.UserIdentifier == userIdentifier);

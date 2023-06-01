@@ -17,7 +17,7 @@ namespace YCNBot.Controllers
             _userAgreedTermsService = userAgreedTermsService;
         }
 
-        [HttpPost("accept-terms")] 
+        [HttpPost("accept-terms")]
         public async Task<IActionResult> AcceptTerms()
         {
             Guid? userIdentifier = _identityService.GetUserIdentifier();
@@ -27,12 +27,12 @@ namespace YCNBot.Controllers
                 return Unauthorized();
 
             }
-            
-            UserAgreedTerms? userAgreedTerms = await _userAgreedTermsService.GetByUser(userIdentifier.Value);
+
+            UserAgreedTerm? userAgreedTerms = await _userAgreedTermsService.GetByUser(userIdentifier.Value);
 
             if (userAgreedTerms == null)
             {
-                await _userAgreedTermsService.Add(new UserAgreedTerms
+                await _userAgreedTermsService.Add(new UserAgreedTerm
                 {
                     UserIdentifier = userIdentifier.Value,
                     Agreed = true

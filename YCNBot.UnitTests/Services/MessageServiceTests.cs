@@ -63,7 +63,7 @@ namespace YCNBot.UnitTest.Services
         {
             var mock = new Mock<IUnitOfWork>();
 
-            Message message = new ();
+            Message message = new();
 
             mock.Setup(x => x.Message.GetByUniqueIdentifierWithChat(It.IsAny<Guid>())).ThrowsAsync(new Exception());
 

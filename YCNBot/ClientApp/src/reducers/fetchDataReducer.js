@@ -13,7 +13,8 @@ const fetchDataReducer = (state, action) => {
         case "FAILURE":
             return {
                 isLoading: false,
-                isError: true
+                isError: true,
+                errorMessage: action.payload
             }
         default:
             throw new Error();

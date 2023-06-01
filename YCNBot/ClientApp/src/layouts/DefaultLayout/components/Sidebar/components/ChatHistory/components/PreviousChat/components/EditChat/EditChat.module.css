@@ -1,0 +1,21 @@
+.edit {
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+.edit input {
+    width: 100%;
+    color: white;
+    background-color: black;
+    border-color: rgb(116, 116, 238);
+    border-radius: 5px;
+}
+
+.editChatButtonsContainer {
+    display: flex;
+}
+
+.loading {
+    color: white !important;
+}

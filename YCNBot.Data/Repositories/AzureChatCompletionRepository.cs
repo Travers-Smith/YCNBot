@@ -23,20 +23,21 @@ namespace YCNBot.Data.Repositories
                 $"deployments/{_configuration["AzureModelDeploymentName"]}/chat/completions?api-version={_configuration["AzureApiVersion"]}",
                 new StringContent(JsonSerializer.Serialize(addChatCompletion), Encoding.UTF8, "application/json"));
 
-            response.EnsureSuccessStatusCode();
-
-            ChatCompletion? chatCompletion = JsonSerializer.Deserialize<ChatCompletion>(await response.Content.ReadAsStringAsync(), new JsonSerializerOptions
+            if (!response.IsSuccessStatusCode)
             {
-                PropertyNameCaseInsensitive = true
-            });
-
-            if (chatCompletion is null)
-            {
-                throw new Exception("Unable to get chat completion");
+                throw new Exception(await response.Content.ReadAsStringAsync());
             }
 
-            return chatCompletion;
+            response.EnsureSuccessStatusCode();
 
+            ChatCompletion? chatCompletion = JsonSerializer.Deserialize<ChatCompletion>(
+                await response.Content.ReadAsStringAsync(),
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+            return chatCompletion is null ? throw new Exception("Unable to get chat completion") : chatCompletion;
         }
     }
 }

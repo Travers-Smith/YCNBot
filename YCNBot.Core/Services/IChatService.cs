@@ -12,6 +12,10 @@ namespace YCNBot.Core.Services
 
         Task<Chat> GetByUniqueIdentifierWithMessages(Guid uniqueIdentifier);
 
+        Task<int> GetCount();
+
+        Task<int> GetUsersCount();
+
         Task<Dictionary<Guid, int>> GetUsersUsage(int skip, int take);
 
         Task Update(Chat chat);

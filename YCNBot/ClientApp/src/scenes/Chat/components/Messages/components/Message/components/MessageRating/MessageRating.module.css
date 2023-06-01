@@ -1,0 +1,16 @@
+.messageRating {
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.error {
+    color: red;
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+.error svg {
+    margin-right: 8px;
+}

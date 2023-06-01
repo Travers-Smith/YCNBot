@@ -13,7 +13,7 @@ namespace YCNBot.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task Add(UserAgreedTerms userAgreedTerms)
+        public async Task Add(UserAgreedTerm userAgreedTerms)
         {
             await _unitOfWork.UserAgreedTerms.AddAsync(userAgreedTerms);
 
@@ -25,12 +25,12 @@ namespace YCNBot.Services
             return (await _unitOfWork.UserAgreedTerms.GetByUser(userIdentifier))?.Agreed == true;
         }
 
-        public async Task<UserAgreedTerms?> GetByUser(Guid userIdentifier)
+        public async Task<UserAgreedTerm?> GetByUser(Guid userIdentifier)
         {
             return await _unitOfWork.UserAgreedTerms.GetByUser(userIdentifier);
         }
 
-        public async Task Update(UserAgreedTerms userAgreedTerms)
+        public async Task Update(UserAgreedTerm userAgreedTerms)
         {
             _unitOfWork.UserAgreedTerms.Update(userAgreedTerms);
 

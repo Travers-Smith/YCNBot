@@ -1,0 +1,29 @@
+.communityPrompt {
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    margin-bottom: 30px;
+}
+
+.dark {
+    background-color: #444654;
+    border-color: black;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+    padding: 20px;
+}
+
+.title {
+    font-weight: 500;
+}
+
+.questionContainer {
+    padding: 20px 20px;
+}
+
+.answerContainer{
+    padding: 0px 20px;
+}

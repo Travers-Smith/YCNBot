@@ -7,7 +7,7 @@ namespace YCNBot.Data.Repositories
     public class ChatRepository : Repository<Chat>, IChatRepository
     {
         public ChatRepository(YCNBotContext context) : base(context)
-        {}
+        { }
 
         public async Task<IEnumerable<Chat>> GetAllByUser(Guid userIdentifier, int skip, int take)
         {
@@ -39,6 +39,14 @@ namespace YCNBot.Data.Repositories
             return await _context.Chats
                 .GroupBy(x => x.UserIdentifier)
                 .ToDictionaryAsync(x => x.Key, x => x.Count());
+        }
+
+        public async Task<int> GetUsersCount()
+        {
+            return await _context.Chats
+                .Select(x => x.UserIdentifier)
+                .Distinct()
+                .CountAsync();
         }
     }
 }

@@ -20,9 +20,19 @@ namespace YCNBot.Services
             await _unitOfWork.CommitAsync();
         }
 
+        public async Task<IEnumerable<Tuple<DateTime, int>>> GetDateBreakdown(int previousDays)
+        {
+            return await _unitOfWork.Message.GetDateBreakdown(previousDays);
+        }
+
         public async Task<Message> GetByUniqueIdentifierWithChat(Guid uniqueIdentifier)
         {
             return await _unitOfWork.Message.GetByUniqueIdentifierWithChat(uniqueIdentifier);
+        }
+
+        public async Task<int> GetCount()
+        {
+            return await _unitOfWork.Message.GetCountAsync();
         }
 
         public async Task Update(Message message)

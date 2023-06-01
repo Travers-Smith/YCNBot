@@ -1,6 +1,6 @@
 ﻿using Moq;
-using YCNBot.Services;
 using YCNBot.Core;
+using YCNBot.Services;
 
 namespace YCNBot.UnitTest.Services
 {

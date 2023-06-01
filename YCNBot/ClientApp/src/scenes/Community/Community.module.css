@@ -1,0 +1,18 @@
+.community {
+    width: 100%;
+    padding: 20px 30px;
+}
+
+.dark{
+    background-color: #28292d !important;
+    color: white;
+}
+
+.dark button{
+    color: white !important;
+}
+
+.dark input {
+    background-color: #444654;
+}
+

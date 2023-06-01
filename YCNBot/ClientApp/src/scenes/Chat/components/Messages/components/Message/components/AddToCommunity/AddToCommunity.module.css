@@ -1,0 +1,19 @@
+.addToCommunityContainer {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.addedToCommunity{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    column-gap: 5px;
+}
+
+.error {
+    color: red;
+}
+
+.darkButton {
+    color: white !important;
+}

@@ -4,12 +4,12 @@ namespace YCNBot.Core.Services
 {
     public interface IUserAgreedTermsService
     {
-        Task Add(UserAgreedTerms userAgreedTerms);
+        Task Add(UserAgreedTerm userAgreedTerms);
 
         Task<bool> CheckAgreed(Guid userIdentifier);
 
-        Task<UserAgreedTerms?> GetByUser(Guid userIdentifier);
+        Task<UserAgreedTerm?> GetByUser(Guid userIdentifier);
 
-        Task Update(UserAgreedTerms userAgreedTerms);
+        Task Update(UserAgreedTerm userAgreedTerms);
     }
 }

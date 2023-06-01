@@ -8,19 +8,19 @@ namespace YCNBot.UnitTest.Services
         public void RemoveSymbols_IncludeSymbols_RemovesSymbols()
         {
             IEnumerable<string> stopwords = new SymbolsRemoverService()
-                .RemoveSymbols(new string[] 
-                { 
-                    "This", 
-                    "a", 
-                    "few", 
-                    "includes", 
-                    "Symbols", 
-                    "like", 
-                    "!", 
-                    "#", 
-                    "@", 
-                    ",", 
-                    "." 
+                .RemoveSymbols(new string[]
+                {
+                    "This",
+                    "a",
+                    "few",
+                    "includes",
+                    "Symbols",
+                    "like",
+                    "!",
+                    "#",
+                    "@",
+                    ",",
+                    "."
                 });
 
             string[] symbolsInInput = new string[]

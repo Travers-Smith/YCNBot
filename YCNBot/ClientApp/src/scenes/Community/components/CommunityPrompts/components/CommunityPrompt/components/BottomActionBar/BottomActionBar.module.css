@@ -1,0 +1,11 @@
+.bottomActionBar{
+    display: flex;
+    column-gap: 20px;
+    border-top: 1px solid lightgrey;
+    padding: 10px;
+}
+
+.rightBar {
+    text-align: end;
+    width: 100%;
+}

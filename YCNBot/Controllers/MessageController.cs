@@ -19,7 +19,7 @@ namespace YCNBot.Controllers
         private readonly IPersonalInformationCheckerService _personalInformationCheckerService;
 
         public MessageController(IChatService chatService, IChatModelPickerService chatModelPickerService,
-            IConfiguration configuration, IIdentityService identityService, IMessageService messageService, 
+            IConfiguration configuration, IIdentityService identityService, IMessageService messageService,
             IPersonalInformationCheckerService personalInformationCheckerService)
         {
             _chatModelPickerService = chatModelPickerService;
@@ -33,29 +33,30 @@ namespace YCNBot.Controllers
         [HttpPost("add-recorded-message")]
         public async Task<IActionResult> AddRecordedChat(AddMessageModel message)
         {
-            if (_personalInformationCheckerService.CheckIfStringHasNames(message.Message))
+            if (!message.AllowPersonalInformation && _personalInformationCheckerService.CheckIfStringHasNames(message.Message))
             {
                 return BadRequest("contains personal information");
             }
 
-            List<Message> newMessages = new ();
+            List<Message> newMessages = new();
 
-            Message newMessage = new ()
+            Message newMessage = new()
             {
                 IsSystem = false,
-                Text = message.Message
+                Text = message.Message,
+                DateAdded = DateTime.Now
             };
 
             Guid? userIdentifier = _identityService.GetUserIdentifier();
 
-            if(userIdentifier == null)
+            if (userIdentifier == null)
             {
                 return Unauthorized();
             }
 
             Chat chat;
 
-            if(message.ChatIdentifier != null)
+            if (message.ChatIdentifier != null)
             {
                 chat = await _chatService.GetByUniqueIdentifierWithMessages(message.ChatIdentifier.Value);
 
@@ -82,7 +83,7 @@ namespace YCNBot.Controllers
 
             IChatCompletionService? chatCompletionService = _chatModelPickerService.GetModel(_configuration["ChatCompletionType"] ?? "AzureOpenAI");
 
-            if(chatCompletionService is null)
+            if (chatCompletionService is null)
             {
                 return StatusCode(500);
             }
@@ -90,7 +91,7 @@ namespace YCNBot.Controllers
             string systemMessage = await chatCompletionService
                 .AddChatCompletion(chat.Messages.Concat(newMessages), _configuration["ChatModel"] ?? "");
 
-            if (_personalInformationCheckerService.CheckIfStringHasNames(systemMessage))
+            if (!message.AllowPersonalInformation && _personalInformationCheckerService.CheckIfStringHasNames(systemMessage))
             {
                 return BadRequest("contains personal information");
             }
@@ -100,7 +101,8 @@ namespace YCNBot.Controllers
                 ChatId = chat.Id,
                 Chat = chat.Id == 0 ? chat : null,
                 IsSystem = true,
-                Text = systemMessage
+                Text = systemMessage,
+                DateAdded = DateTime.Now
             });
 
             await _messageService.AddRange(newMessages);
@@ -114,7 +116,9 @@ namespace YCNBot.Controllers
                 },
                 IsSystem = true,
                 Text = systemMessage,
-                UniqueIdentifier = newMessages.Select(x => x.UniqueIdentifier).LastOrDefault()
+                UniqueIdentifier = newMessages.Select(x => x.UniqueIdentifier).LastOrDefault(),
+                InputContainedPersonalInformation = message.AllowPersonalInformation && _personalInformationCheckerService.CheckIfStringHasNames(message.Message),
+                OutputContainedPersonalInformation = message.AllowPersonalInformation && _personalInformationCheckerService.CheckIfStringHasNames(systemMessage)
             });
         }
 
@@ -155,11 +159,11 @@ namespace YCNBot.Controllers
         }
 
         [HttpPatch("change-rating")]
-        public async Task<ActionResult> ChangeMessageRating(UpdateMessageRatingModel messageRating)
+        public async Task<IActionResult> ChangeMessageRating(UpdateMessageRatingModel messageRating)
         {
             Message message = await _messageService.GetByUniqueIdentifierWithChat(messageRating.MessageIdentifier);
 
-            if(message.Chat.UserIdentifier != _identityService.GetUserIdentifier())
+            if (message.Chat.UserIdentifier != _identityService.GetUserIdentifier())
             {
                 return Unauthorized();
             }
@@ -169,6 +173,23 @@ namespace YCNBot.Controllers
             await _messageService.Update(message);
 
             return StatusCode(204);
+        }
+
+        [HttpGet("get-count")]
+        public async Task<IActionResult> GetUserCount()
+        {
+            return Ok(await _messageService.GetCount());
+        }
+
+        [HttpGet("get-message-breakdown")]
+        public async Task<IActionResult> GetMessageBreakdown()
+        {
+            return Ok((await _messageService.GetDateBreakdown(20))
+                .Select(x => new DateBreakdownModel
+                {
+                    DateAdded = x.Item1.ToString("dd/MM/yy"),
+                    Messages = x.Item2
+                }));
         }
     }
 }

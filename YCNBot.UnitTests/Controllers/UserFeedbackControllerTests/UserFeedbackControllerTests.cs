@@ -30,13 +30,13 @@ namespace YCNBot.UnitTest.Controllers.UserFeedbackControllerTests
         [Fact]
         public async Task Add_Unauthorized_ReturnsUnauthorizedResult()
         {
-            Mock<IIdentityService> identityService = new (); 
-            Mock<IUserFeedbackService> userFeedbackService = new ();
+            Mock<IIdentityService> identityService = new();
+            Mock<IUserFeedbackService> userFeedbackService = new();
 
             IActionResult result = await new UserFeedbackController(identityService.Object, userFeedbackService.Object)
                 .Add(new AddUserFeedbackModel());
 
-            Assert.IsType<UnauthorizedResult>(result);  
+            Assert.IsType<UnauthorizedResult>(result);
         }
 
         [Fact]

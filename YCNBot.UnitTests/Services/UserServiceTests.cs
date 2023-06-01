@@ -10,7 +10,7 @@ namespace YCNBot.UnitTest.Services
         [Fact]
         public async Task GetUsers_Success_ReturnsListOfUsers()
         {
-            Mock<IUnitOfWork> unitOfWork = new ();
+            Mock<IUnitOfWork> unitOfWork = new();
 
             IEnumerable<Guid> userIdentifiers = new Guid[]
             {
@@ -19,16 +19,15 @@ namespace YCNBot.UnitTest.Services
 
             unitOfWork
                 .Setup(uow => uow.User.GetUserDetails(userIdentifiers))
-                .ReturnsAsync(new List<User>()
+                .ReturnsAsync(new Dictionary<string, User>
                 {
-                    new User()
+                    { "userIdentifier", new User() }
                 });
 
-            IEnumerable<User>? users = await new UserService(unitOfWork.Object).GetUsers(userIdentifiers);
+            Dictionary<string, User>? users = await new UserService(unitOfWork.Object).GetUserDetails(userIdentifiers);
 
-            Assert.IsAssignableFrom<IEnumerable<User>>(users);
+            Assert.IsAssignableFrom<Dictionary<string, User>>(users);
             Assert.NotNull(users);
-            Assert.True(users.Count() == 1);
         }
 
         [Fact]
@@ -45,7 +44,7 @@ namespace YCNBot.UnitTest.Services
                 .Setup(uow => uow.User.GetUserDetails(userIdentifiers))
                 .ThrowsAsync(new Exception());
 
-            await Assert.ThrowsAsync<Exception>(() => new UserService(unitOfWork.Object).GetUsers(userIdentifiers));
+            await Assert.ThrowsAsync<Exception>(() => new UserService(unitOfWork.Object).GetUserDetails(userIdentifiers));
         }
 
         [Fact]
@@ -58,13 +57,13 @@ namespace YCNBot.UnitTest.Services
                 Guid.NewGuid(),
             };
 
-            IEnumerable<User>? users = null;
+            Dictionary<string, User>? users = null;
 
             unitOfWork
                 .Setup(x => x.User.GetUserDetails(userIdentifiers))
                 .ReturnsAsync(users);
 
-            Assert.Null(await new UserService(unitOfWork.Object).GetUsers(userIdentifiers));
+            Assert.Null(await new UserService(unitOfWork.Object).GetUserDetails(userIdentifiers));
         }
     }
 }

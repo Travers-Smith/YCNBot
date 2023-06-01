@@ -26,17 +26,12 @@ namespace YCNBot.Data.Repositories
                     "user"
                 }
             };
-            
-            var test = await _graphServiceClient
-                .Users
-                .GetByIds
-                .PostAsync(requestBody);
 
             User? user = await _graphServiceClient
                 .Users[id.ToString()]
                 .GetAsync();
 
-            if(user != null) 
+            if (user != null)
             {
                 return new Core.Entities.User
                 {
@@ -52,41 +47,50 @@ namespace YCNBot.Data.Repositories
             return null;
         }
 
-        public async Task<IEnumerable<Core.Entities.User>?> GetUserDetails(IEnumerable<Guid> ids)
+        public async Task<Dictionary<string, Core.Entities.User>?> GetUserDetails(IEnumerable<Guid> ids)
         {
-            IEnumerable<User>? users = (await _graphServiceClient
-                    .Users
-                    .GetAsync(request =>
-                    {
-                        request.QueryParameters.Count = true;
-                        request.QueryParameters.Orderby = new string[] { "displayName" };
-                        request.QueryParameters.Select = new string[] 
-                        { 
-                            "id", 
-                            "department", 
-                            "givenName", 
-                            "jobTitle", 
-                            "mail",
-                            "surname" 
-                        };
-                        request.Headers.Add("ConsistencyLevel", "eventual");
-                        request.QueryParameters.Filter = $"id in ({string.Join(", ", ids.Select(x => $"'{x}'"))})";
-
-                    }))?.Value;
-
-            if (users != null)
+            try
             {
-                return users.Select(user => new Core.Entities.User
-                {
-                    Id = Guid.Parse(user.Id),
-                    Department = user.Department,
-                    FirstName = user.GivenName,
-                    LastName = user.Surname,
-                    Email = user.Mail,
-                    JobTitle = user.JobTitle
-                });
-            }
+                IEnumerable<User>? users = (await _graphServiceClient
+                        .Users
+                        .GetAsync(request =>
+                        {
+                            request.QueryParameters.Top = 500;
+                            request.QueryParameters.Count = true;
+                            request.QueryParameters.Orderby = new string[] { "displayName" };
+                            request.QueryParameters.Select = new string[]
+                            {
+                                "id",
+                                "department",
+                                "givenName",
+                                "jobTitle",
+                                "mail",
+                                "surname"
+                            };
+                            request.Headers.Add("ConsistencyLevel", "eventual");
+                            request.QueryParameters.Filter = $"id in ({string.Join(", ", ids.Select(x => $"'{x}'"))})";
 
+                        }))?.Value;
+
+                if (users != null)
+                {
+                    return users
+                        .Where(user => user.Id != null)
+                        .ToDictionary(user => user.Id ?? "", user => new Core.Entities.User
+                        {
+                            Id = Guid.Parse(user.Id ?? ""),
+                            Department = user.Department,
+                            FirstName = user.GivenName,
+                            LastName = user.Surname,
+                            Email = user.Mail,
+                            JobTitle = user.JobTitle
+                        });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
             return null;
         }
     }

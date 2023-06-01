@@ -6,6 +6,6 @@ namespace YCNBot.Core.Repositories
     {
         Task<User?> GetUserDetails(Guid id);
 
-        Task<IEnumerable<User>?> GetUserDetails(IEnumerable<Guid> ids);
+        Task<Dictionary<string, Core.Entities.User>?> GetUserDetails(IEnumerable<Guid> ids);
     }
 }

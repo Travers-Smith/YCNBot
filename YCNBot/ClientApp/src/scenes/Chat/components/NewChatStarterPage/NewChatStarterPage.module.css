@@ -1,0 +1,31 @@
+.exampleMessages {
+    height: 85vh;
+    justify-items: center;
+    padding: 0px 3vw;
+    overflow-y: auto;
+}
+
+.headingContainer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-top: 10vh;
+}
+
+.darkHeading {
+    color: white;
+}
+
+.lightHeading {
+    color: black;
+}
+
+.body {
+    display: grid;
+    column-gap: 30px;
+    justify-content: center;
+    padding-top: 5vh;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 0.5fr 1fr 1fr 1fr;
+}

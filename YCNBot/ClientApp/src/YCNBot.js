@@ -3,8 +3,12 @@ import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import GlobalContext from "./context/GlobalContext";
 import useSafeDataFetch from "./hooks/useSafeDataFetch";
 import Login from "./scenes/Login/Login";
-import Mainpage from "./scenes/Mainpage/Mainpage";
-import UserReport from "./scenes/Mainpage/components/UserReport/UserReport";
+import Chat from "./scenes/Chat/Chat";
+import UserReport from "./scenes/UserReport/UserReport";
+import UsageDashboard from "./scenes/UsageDashboard/UsageDashboard";
+import DefaultLayout from "./layouts/DefaultLayout/DefaultLayout";
+import AcceptTermsDialog from "./components/AcceptTermsDialog/AcceptTermsDialog";
+import Community from "./scenes/Community/Community";
 
 const YCNBot = () => {
     const [darkMode, setDarkMode] = useState(sessionStorage.getItem("darkMode") === "true");
@@ -12,6 +16,11 @@ const YCNBot = () => {
     const navigate = useNavigate();
     const [checkedLoggedIn, setCheckedLoggedIn] = useState(false);
     const [user, setUser] = useState(null);
+    const [previousChats, setPreviousChats] = useState([]);
+    const [chat, setChat] = useState({
+        messages: [],
+        name: ""
+    });
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,6 +40,8 @@ const YCNBot = () => {
         fetchData();
     }, [])
 
+    const userAgreedToTerms = sessionStorage.getItem("agreedToTerms") === "true";
+
     return (
         <GlobalContext.Provider
             value={{
@@ -40,22 +51,62 @@ const YCNBot = () => {
                 setUser
             }}
         >
-            <Routes>
-                <Route path="/login" element={<Login/>}/>
-                {
-                    checkedLoggedIn &&
-                        <Route path="/" element={<Navigate to="/chat" replace/>}/>
-                }
-                <Route path="/chat">
-                    <Route path="" element={<Mainpage/>}/>
-                    <Route path=":chatIdentifier" element={<Mainpage/>}/>
-                    {
-                        user?.isAdmin &&
-                            <Route path="user-usage" element={<UserReport/>}/>
-                    }
-                </Route>
-            </Routes>
-        </GlobalContext.Provider>
+            {
+                user && 
+                    <AcceptTermsDialog
+                        open={!userAgreedToTerms}
+                        setUserAgreedToTerms={agreed => sessionStorage.setItem("agreedToTerms", agreed)}
+                    />
+            }
+                    <Routes >
+                        <Route path="/login" element={<Login/>}/>
+                        {
+                            (user && userAgreedToTerms) &&
+                                <Route 
+                                    element={
+                                        <DefaultLayout 
+                                            chat={chat}
+                                            previousChats={previousChats}
+                                            setPreviousChats={setPreviousChats}
+                                        />
+                                    }
+                                >
+                                    {
+                                        checkedLoggedIn &&
+                                            <Route path="/" element={<Navigate to="/chat" replace/>}/>
+                                    }
+                                    <Route path="/">
+                                        <Route 
+                                            path="/chat" 
+                                            element={
+                                                <Chat 
+                                                    chat={chat}
+                                                    setChat={setChat}
+                                                    setPreviousChats={setPreviousChats}
+                                                />
+                                            }
+                                        />
+                                        <Route 
+                                            path="/chat/:chatIdentifier"     
+                                            element={
+                                                <Chat 
+                                                    chat={chat}
+                                                    setChat={setChat}
+                                                    setPreviousChats={setPreviousChats}
+                                                />
+                                            }
+                                        />
+                                        {
+                                            user?.isAdmin &&
+                                                <Route path="user-usage" element={<UserReport/>}/>
+                                        }
+                                    </Route>
+                                    <Route path="/community" element={<Community/>}/>
+                                    <Route path="/usage" element={<UsageDashboard/>}/>
+                            </Route>
+                        }
+                    </Routes>
+        </GlobalContext.Provider>            
     )
 };
 

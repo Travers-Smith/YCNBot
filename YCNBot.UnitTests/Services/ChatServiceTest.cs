@@ -1,7 +1,6 @@
 ﻿using Moq;
 using YCNBot.Core;
 using YCNBot.Core.Entities;
-using YCNBot.Models;
 using YCNBot.Services;
 
 namespace YCNBot.UnitTest.Services
@@ -34,9 +33,9 @@ namespace YCNBot.UnitTest.Services
             mock.Setup(x => x.CommitAsync()).ThrowsAsync(new Exception());
 
             await Assert.ThrowsAsync<Exception>(() => new ChatService(mock.Object).Add(new Chat()
-                {
-                    Name = "Test"
-                })
+            {
+                Name = "Test"
+            })
             );
         }
 
@@ -116,7 +115,7 @@ namespace YCNBot.UnitTest.Services
         {
             var mock = new Mock<IUnitOfWork>();
 
-            Chat chat = new ();
+            Chat chat = new();
 
             mock.Setup(x => x.Chat.GetByUniqueIdentifierWithMessages(It.IsAny<Guid>())).ReturnsAsync(chat);
 

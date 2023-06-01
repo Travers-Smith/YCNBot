@@ -22,6 +22,18 @@ namespace YCNBot.Controllers
             _identityService = identityService;
         }
 
+        [HttpGet("get-chat-count")]
+        public async Task<IActionResult> GetChatCount()
+        {
+            return Ok(await _chatService.GetCount());
+        }
+
+        [HttpGet("get-user-count")]
+        public async Task<IActionResult> GetUserCount()
+        {
+            return Ok(await _chatService.GetUsersCount());
+        }
+
         [HttpGet("get-all-by-user")]
         public async Task<IActionResult> GetAllByUser([FromQuery] int? pageNumber)
         {
@@ -42,14 +54,14 @@ namespace YCNBot.Controllers
                     Name = chat.Name,
                     UniqueIdentifier = chat.UniqueIdentifier
                 }));
-            }
+        }
 
         [HttpGet("get-by-unique-identifier/{chatIdentifier}")]
         public async Task<IActionResult> GetByChatIdentifier(Guid chatIdentifier)
         {
             Chat chat = await _chatService.GetByUniqueIdentifierWithMessages(chatIdentifier);
 
-            if(chat.UserIdentifier != _identityService.GetUserIdentifier())
+            if (chat.UserIdentifier != _identityService.GetUserIdentifier())
             {
                 return Unauthorized();
             }
@@ -59,7 +71,8 @@ namespace YCNBot.Controllers
                 Name = chat.Name,
                 UniqueIdentifier = chat.UniqueIdentifier,
                 Messages = chat.Messages
-                    .Select(message => new MessageModel {
+                    .Select(message => new MessageModel
+                    {
                         Text = message.Text,
                         IsSystem = message.IsSystem,
                         Rating = message.Rating,
@@ -73,7 +86,7 @@ namespace YCNBot.Controllers
         {
             Chat chat = await _chatService.GetByUniqueIdentifier(chatIdentifier);
 
-            if(chat.UserIdentifier != _identityService.GetUserIdentifier())
+            if (chat.UserIdentifier != _identityService.GetUserIdentifier())
             {
                 return Unauthorized();
             }
@@ -90,7 +103,7 @@ namespace YCNBot.Controllers
         {
             Chat chatEntity = await _chatService.GetByUniqueIdentifier(chat.ChatIdentifier);
 
-            if(chatEntity.UserIdentifier != _identityService.GetUserIdentifier())
+            if (chatEntity.UserIdentifier != _identityService.GetUserIdentifier())
             {
                 return Unauthorized();
             }

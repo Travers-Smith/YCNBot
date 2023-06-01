@@ -10,9 +10,9 @@ namespace YCNBot.UnitTest.Services
         [Fact]
         public async Task Add_Success_AddsFeedback()
         {
-            Mock<IUnitOfWork> unitOfWork = new ();
+            Mock<IUnitOfWork> unitOfWork = new();
 
-            UserFeedback userFeedback = new ();
+            UserFeedback userFeedback = new();
 
             unitOfWork.Setup(x => x.UserFeedback.AddAsync(userFeedback));
 

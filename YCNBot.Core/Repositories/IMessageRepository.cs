@@ -7,5 +7,7 @@ namespace YCNBot.Core.Repositories
         Task<Message> GetByUniqueIdentifierWithChat(Guid uniqueIdentifier);
 
         Task<IEnumerable<Message>> GetMessagesByChat(Guid chatIdentifier, int skip, int take);
+
+        Task<IEnumerable<Tuple<DateTime, int>>> GetDateBreakdown(int previousDays);
     }
 }

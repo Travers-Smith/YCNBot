@@ -43,6 +43,7 @@ services.AddAuthorization(options =>
     options.FallbackPolicy = options.DefaultPolicy;
     options.AddPolicy("AgreedToTerms", policy => policy.RequireClaim("AgreedToTerms"));
 
+
     string? securityGroupId = builder.Configuration["SecurityGroupId"];
 
     if (securityGroupId != null)
@@ -90,20 +91,25 @@ services.AddTransient<IChatService, ChatService>();
 services.AddTransient<IChatCompletionService, AzureChatCompletionService>();
 services.AddTransient<IChatCompletionService, OpenAIChatCompletionService>();
 services.AddTransient<IChatModelPickerService, ChatModelPickerService>();
+services.AddTransient<ICommunityPromptService, CommunityPromptService>();
+services.AddTransient<ICommunityPromptService, CommunityPromptService>();
+services.AddTransient<ICommunityPromptCommentService, CommunityPromptCommentService>();
+services.AddTransient<ICommunityPromptLikeService, CommunityPromptLikeService>();
 services.AddTransient<IIdentityService, IdentityService>();
 services.AddTransient<IMessageService, MessageService>();
 services.AddTransient<IPersonalInformationCheckerService, PersonalInformationCheckerService>();
 services.AddTransient<ISymbolsRemoverService, SymbolsRemoverService>();
 services.AddTransient<IStopWordRemoverService, StopWordRemoverService>();
 services.AddTransient<IUserAgreedTermsService, UserAgreedTermsService>();
-services.AddTransient<IUserService,  UserService>();
+services.AddTransient<IUserService, UserService>();
 services.AddTransient<IUserFeedbackService, UserFeedbackService>();
 services.AddTransient<IClaimsTransformation, AgreedToTermsClaimTransformation>();
 
 string? azureADCertThumbprint = builder.Configuration["AzureADCertThumbprint"];
 
-if(azureADCertThumbprint != null)
+if (azureADCertThumbprint != null)
 {
+
     services.AddScoped(_ =>
     {
         var tenantId = builder.Configuration["AzureAd:TenantId"];
@@ -128,11 +134,7 @@ if(azureADCertThumbprint != null)
 
         return new GraphServiceClient(clientSecretCredential, new[] { "https://graph.microsoft.com/.default" });
     });
-}
 
-
-if (builder.Environment.IsProduction() && azureADCertThumbprint != null)
-{
     using X509Store x509Store = new(StoreLocation.CurrentUser);
 
     x509Store.Open(OpenFlags.ReadOnly);

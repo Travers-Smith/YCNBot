@@ -1,0 +1,16 @@
+.usage {
+    color: white;
+    display: flex;
+    align-items: center;
+    margin: 0px 15px 15px 15px;
+    padding-top: 20px;
+}
+
+.usage:hover{
+    color: white;
+}
+
+.text {
+    padding-left: 10px;
+    color: white;
+}

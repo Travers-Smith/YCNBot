@@ -1,0 +1,7 @@
+.statPanel {
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    width: 100%;
+    padding: 20px 20px;
+    margin-bottom: 40px;
+}

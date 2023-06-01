@@ -14,13 +14,13 @@ namespace YCNBot.UnitTest.Controllers.UserReportingControllers
         [Fact]
         public async Task GetActiveUsers_Success_ReturnsUserUsageList()
         {
-            Mock<IChatService> chatService = new ();
-            Mock<IConfiguration> configuration = new ();
-            Mock<IIdentityService> identityService = new ();
-            Mock<IUserService> userService = new ();
+            Mock<IChatService> chatService = new();
+            Mock<IConfiguration> configuration = new();
+            Mock<IIdentityService> identityService = new();
+            Mock<IUserService> userService = new();
 
             Guid userGuid = Guid.NewGuid();
-            
+
             chatService
                 .Setup(x => x.GetUsersUsage(It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(new Dictionary<Guid, int>
@@ -29,12 +29,15 @@ namespace YCNBot.UnitTest.Controllers.UserReportingControllers
                 });
 
             userService
-                .Setup(x => x.GetUsers(It.IsAny<IEnumerable<Guid>>()))
-                .ReturnsAsync(new List<User>
+                .Setup(x => x.GetUserDetails(It.IsAny<IEnumerable<Guid>>()))
+                .ReturnsAsync(new Dictionary<string, User>
                 {
-                    new User
                     {
-                        Id = userGuid
+                        "userIdentifier",
+                        new User
+                        {
+                            Id = userGuid
+                        }
                     }
                 });
 
@@ -47,7 +50,7 @@ namespace YCNBot.UnitTest.Controllers.UserReportingControllers
                 userService.Object).GetActiveUsers(1);
 
             OkObjectResult okResult = Assert.IsType<OkObjectResult>(result);
- 
+
             IEnumerable<UserUsageModel> userUsage = Assert.IsAssignableFrom<IEnumerable<UserUsageModel>>(okResult.Value);
 
             Assert.Single(userUsage);
@@ -95,10 +98,10 @@ namespace YCNBot.UnitTest.Controllers.UserReportingControllers
                     { userGuid, 10 }
                 });
 
-            IEnumerable<User>? users = null;
+            Dictionary<string, User>? users = null;
 
             userService
-                .Setup(x => x.GetUsers(It.IsAny<IEnumerable<Guid>>()))
+                .Setup(x => x.GetUserDetails(It.IsAny<IEnumerable<Guid>>()))
                 .ReturnsAsync(users);
 
             IActionResult result = await new UserReportingController(chatService.Object,
@@ -149,7 +152,7 @@ namespace YCNBot.UnitTest.Controllers.UserReportingControllers
                 });
 
             userService
-                .Setup(x => x.GetUsers(It.IsAny<IEnumerable<Guid>>()))
+                .Setup(x => x.GetUserDetails(It.IsAny<IEnumerable<Guid>>()))
                 .ThrowsAsync(new Exception());
 
             await Assert.ThrowsAsync<Exception>(() => new UserReportingController(chatService.Object,

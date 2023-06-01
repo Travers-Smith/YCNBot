@@ -61,8 +61,8 @@ namespace YCNBot.Services
                 .Any(x => x.Type == "groups" && x.Value == _configuration["SecurityGroupId"]) ?? false;
         }
 
-        public bool IsAuthenticated() 
-        { 
+        public bool IsAuthenticated()
+        {
             return _httpContextAccessor
                 ?.HttpContext
                 ?.User

@@ -24,7 +24,7 @@ namespace YCNBot.Data.Repositories
         }
 
         public void Detatch(TEntity entity)
-        {   
+        {
             _context.Entry(entity).State = EntityState.Detached;
         }
 
@@ -55,6 +55,11 @@ namespace YCNBot.Data.Repositories
         public ValueTask<TEntity?> GetByIdAsync(int id)
         {
             return _context.Set<TEntity>().FindAsync(id);
+        }
+
+        public async Task<int> GetCountAsync()
+        {
+            return await _context.Set<TEntity>().CountAsync();
         }
 
         public void Remove(TEntity entity)

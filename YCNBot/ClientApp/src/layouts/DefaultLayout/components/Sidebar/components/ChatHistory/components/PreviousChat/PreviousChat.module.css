@@ -1,0 +1,22 @@
+.previousChatContainer {
+    margin-bottom: 35px;
+}
+
+.previousChat {
+    color: white;
+    display: flex;
+    align-items: center;
+    margin: 0px 0px 10px 15px;
+}
+
+.previousChat a {
+    color: white;
+    display: flex;
+    align-items: center;
+    min-width: 70%;
+} 
+
+.error {
+    color: red;
+    margin-left: 40px;
+}

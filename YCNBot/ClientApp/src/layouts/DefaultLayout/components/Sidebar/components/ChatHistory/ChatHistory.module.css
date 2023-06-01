@@ -1,0 +1,19 @@
+.chatHistory{
+    height: 40vh;
+    overflow-y: auto;
+    margin-top: 50px;
+}
+
+.isErrorContainer {
+    color: white;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-style: italic;
+}
+
+.isError {
+    display: flex;
+}

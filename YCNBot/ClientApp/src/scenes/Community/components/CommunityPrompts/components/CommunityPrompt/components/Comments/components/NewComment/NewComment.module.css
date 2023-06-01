@@ -1,0 +1,12 @@
+.newComment {
+    width: 100%;
+    border-top: 1px solid lightgrey;
+    padding-bottom: 3px;
+}
+
+.newComment input {
+    width: 100%;
+    padding: 10px 20px;
+    border: none;
+    padding: 20px
+}

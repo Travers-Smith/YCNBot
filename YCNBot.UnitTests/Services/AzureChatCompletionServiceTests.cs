@@ -20,8 +20,8 @@ namespace YCNBot.UnitTest.Services
                 {
                     new ChatCompletionChoice
                     {
-                        Message = new ChatCompletionChoiceMessage 
-                        { 
+                        Message = new ChatCompletionChoiceMessage
+                        {
                             Content = completedMessage,
                             Role = "System"
                         }

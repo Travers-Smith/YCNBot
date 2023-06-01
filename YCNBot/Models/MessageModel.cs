@@ -11,5 +11,10 @@
         public ChatModel Chat { get; set; }
 
         public Guid UniqueIdentifier { get; set; }
+
+        public bool? InputContainedPersonalInformation { get; set; }
+
+        public bool? OutputContainedPersonalInformation { get; set; }
+
     }
 }

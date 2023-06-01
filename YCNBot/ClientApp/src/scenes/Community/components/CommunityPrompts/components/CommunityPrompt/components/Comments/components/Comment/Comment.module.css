@@ -1,0 +1,34 @@
+.comment {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+    margin-bottom: 15px;
+}
+
+.commentText {
+    background-color: rgb(245, 244, 244);
+    padding: 10px 20px;
+    border-radius: 5px;
+    width: 100%;
+    color: black;
+}
+
+.topRow {
+    margin-bottom: 10px;
+}
+
+.header {
+    display: flex;
+    width: 100%;
+}
+
+.name {
+    font-weight: 600;
+    width: 50%;
+}
+
+.time {
+    text-align: end;
+    width: 50%;
+
+}

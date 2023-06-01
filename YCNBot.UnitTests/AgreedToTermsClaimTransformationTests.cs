@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using YCNBot;
 
 namespace YCNBot.UnitTest
 {

@@ -1,14 +1,15 @@
 {
     "ALLOW_PERSONAL_MODE": false,
-    "APP_NAME": "YCNBot",
-    "COMPANY_INPUT_TERMS": [
-      "Your input term 1",
-      "Your input term 2",
-      "Your input term 3"
-    ],
+    "APP_NAME": "TSBot",
+  "COMPANY_INPUT_TERMS": [
+    "You must not upload any personal data (i.e. any information from which a living person can be identified) into the tool.",
+    "In addition, you must not upload any client-related information.",
+    "To ensure that the above rules are being followed, all input submitted into the tool is logged on an internal database that is accessible and monitored by the TS AI team."
+  ],
     "COMPANY_OUTPUT_TERMS": [
-      "Your output term 1",
-      "Your output term 2",
-      "Your output term 3"
-  ]
+        "The answers provided by this tool should not be relied upon.  Output may be factually incorrect and, potentially, made up (i.e. the tool may \"hallucinate\" answers).",
+        "In addition, the tool has only been trained on data available up to 2021.  It may not, therefore, be capable of providing you with up-to-date, factually accurate information.",
+        "Taking the above into account, this tool should not be used for directly advising clients.",
+        "You are responsible for checking and validating all output."
+    ]
 }

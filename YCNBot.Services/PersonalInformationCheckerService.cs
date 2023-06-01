@@ -9,7 +9,7 @@ namespace YCNBot.Services
         private readonly IStopWordRemoverService _stopWordRemoverService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public PersonalInformationCheckerService(ISymbolsRemoverService symbolsRemoverService, 
+        public PersonalInformationCheckerService(ISymbolsRemoverService symbolsRemoverService,
             IStopWordRemoverService stopWordRemoverService, IUnitOfWork unitOfWork)
         {
             _symbolsRemoverService = symbolsRemoverService;
@@ -22,13 +22,13 @@ namespace YCNBot.Services
             IEnumerable<string> filteredWords = _stopWordRemoverService.RemoveStopWords(text.ToLower().Split(" "));
 
             filteredWords = _symbolsRemoverService
-                .RemoveSymbols(filteredWords);  
+                .RemoveSymbols(filteredWords);
 
             foreach (string word in filteredWords)
             {
                 if (!string.IsNullOrEmpty(word))
                 {
-                    foreach(string? name in _unitOfWork.Name.GetNames(word.First(), word.Last(), word.Length))
+                    foreach (string? name in _unitOfWork.Name.GetNames(word.First(), word.Last(), word.Length))
                     {
                         if (name.ToLower() == word)
                         {
@@ -36,6 +36,7 @@ namespace YCNBot.Services
                         }
                     }
                 }
+
             }
 
             return false;

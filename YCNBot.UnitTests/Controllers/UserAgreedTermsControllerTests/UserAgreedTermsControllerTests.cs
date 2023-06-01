@@ -4,35 +4,35 @@ using YCNBot.Controllers;
 using YCNBot.Core.Entities;
 using YCNBot.Core.Services;
 
-namespace YCNBot.UnitTest.Controllers.UserAgreedTermsControllerTests
+namespace YCNBot.UnitTest.Controllers.UserAgreedTermControllerTests
 {
-    public class UserAgreedTermsControllerTests
+    public class UserAgreedTermControllerTests
     {
         [Fact]
         public async Task AcceptTerms_NoUser_ReturnsUnauthorizedResult()
         {
-            var mockUserAgreedTermsService = new Mock<IUserAgreedTermsService>();
+            var mockUserAgreedTermervice = new Mock<IUserAgreedTermsService>();
 
             var mockIdentityService = new Mock<IIdentityService>();
 
-            Assert.IsType<UnauthorizedResult>(await new UserAgreedTermsController(mockIdentityService.Object, mockUserAgreedTermsService.Object)
+            Assert.IsType<UnauthorizedResult>(await new UserAgreedTermsController(mockIdentityService.Object, mockUserAgreedTermervice.Object)
                 .AcceptTerms());
         }
 
         [Fact]
         public async Task AcceptTerms_AddsAgreedTerms_ReturnSuccessCode()
         {
-            var mockUserAgreedTermsService = new Mock<IUserAgreedTermsService>();
-            
+            var mockUserAgreedTermervice = new Mock<IUserAgreedTermsService>();
+
             var mockIdentityService = new Mock<IIdentityService>();
 
             Guid userGuid = Guid.NewGuid();
 
             mockIdentityService.Setup(x => x.GetUserIdentifier()).Returns(userGuid);
 
-            mockUserAgreedTermsService.Setup(x => x.GetByUser(It.IsAny<Guid>()));
+            mockUserAgreedTermervice.Setup(x => x.GetByUser(It.IsAny<Guid>()));
 
-            IActionResult result = await new UserAgreedTermsController(mockIdentityService.Object, mockUserAgreedTermsService.Object).AcceptTerms();
+            IActionResult result = await new UserAgreedTermsController(mockIdentityService.Object, mockUserAgreedTermervice.Object).AcceptTerms();
 
             Assert.Multiple(() =>
             {
@@ -42,9 +42,9 @@ namespace YCNBot.UnitTest.Controllers.UserAgreedTermsControllerTests
         }
 
         [Fact]
-        public async Task AcceptTerms_AddsAgreedTerms_AddsUserAgreedTerms()
+        public async Task AcceptTerms_AddsAgreedTerms_AddsUserAgreedTerm()
         {
-            var mockUserAgreedTermsService = new Mock<IUserAgreedTermsService>();
+            var mockUserAgreedTermervice = new Mock<IUserAgreedTermsService>();
 
             var mockIdentityService = new Mock<IIdentityService>();
 
@@ -52,11 +52,11 @@ namespace YCNBot.UnitTest.Controllers.UserAgreedTermsControllerTests
 
             mockIdentityService.Setup(x => x.GetUserIdentifier()).Returns(userGuid);
 
-            mockUserAgreedTermsService.Setup(x => x.GetByUser(It.IsAny<Guid>()));
+            mockUserAgreedTermervice.Setup(x => x.GetByUser(It.IsAny<Guid>()));
 
-            IActionResult result = await new UserAgreedTermsController(mockIdentityService.Object, mockUserAgreedTermsService.Object).AcceptTerms();
+            IActionResult result = await new UserAgreedTermsController(mockIdentityService.Object, mockUserAgreedTermervice.Object).AcceptTerms();
 
-            mockUserAgreedTermsService.Verify(x => x.Add(It.IsAny<UserAgreedTerms>()), Times.Once);
+            mockUserAgreedTermervice.Verify(x => x.Add(It.IsAny<UserAgreedTerm>()), Times.Once);
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace YCNBot.UnitTest.Controllers.UserAgreedTermsControllerTests
 
             mockIdentityService.Setup(x => x.GetUserIdentifier()).Returns(userGuid);
 
-            mockUserAgreedTermsService.Setup(x => x.GetByUser(It.IsAny<Guid>())).ReturnsAsync(new UserAgreedTerms
+            mockUserAgreedTermsService.Setup(x => x.GetByUser(It.IsAny<Guid>())).ReturnsAsync(new UserAgreedTerm
             {
                 Agreed = true
             });
@@ -95,14 +95,14 @@ namespace YCNBot.UnitTest.Controllers.UserAgreedTermsControllerTests
 
             mockIdentityService.Setup(x => x.GetUserIdentifier()).Returns(userGuid);
 
-            mockUserAgreedTermsService.Setup(x => x.GetByUser(It.IsAny<Guid>())).ReturnsAsync(new UserAgreedTerms
+            mockUserAgreedTermsService.Setup(x => x.GetByUser(It.IsAny<Guid>())).ReturnsAsync(new UserAgreedTerm
             {
                 Agreed = true
             });
 
             IActionResult result = await new UserAgreedTermsController(mockIdentityService.Object, mockUserAgreedTermsService.Object).AcceptTerms();
 
-            mockUserAgreedTermsService.Verify(x => x.Update(It.IsAny<UserAgreedTerms>()), Times.Once);
+            mockUserAgreedTermsService.Verify(x => x.Update(It.IsAny<UserAgreedTerm>()), Times.Once);
         }
     }
 }

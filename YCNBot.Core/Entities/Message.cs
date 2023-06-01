@@ -10,9 +10,11 @@ public partial class Message
 
     public int ChatId { get; set; }
 
+    public Guid UniqueIdentifier { get; set; }
+
     public int? Rating { get; set; }
 
-    public Guid UniqueIdentifier { get; set; }
+    public DateTime? DateAdded { get; set; }
 
     public virtual Chat Chat { get; set; } = null!;
 }

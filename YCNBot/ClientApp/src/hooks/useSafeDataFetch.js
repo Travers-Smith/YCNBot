@@ -5,7 +5,8 @@ import fetchDataReducer from "../reducers/fetchDataReducer";
 const useSafeDataFetch = () => {
     const [data, dispatch] = useReducer(fetchDataReducer, {
         isLoading: false, 
-        isError: false
+        isError: false,
+        errorMessage: null
     });
     
     let signal = null;
@@ -30,10 +31,12 @@ const useSafeDataFetch = () => {
             };
 
         } catch(e) {
-            dispatch({ type: "FAILURE" });
+            const errorMessage = e?.response?.data;
+
+            dispatch({ type: "FAILURE", payload: errorMessage });
             return {
                 isError: true,
-                errorMessage: e?.response?.data
+                errorMessage: errorMessage
             }
         }
     }

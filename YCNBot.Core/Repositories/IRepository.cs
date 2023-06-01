@@ -21,6 +21,8 @@ namespace YCNBot.Core.Repositories
 
         Task<List<TEntity>> GetAllAsync();
 
+        Task<int> GetCountAsync();
+
         Task<List<TEntity>> GetTopNAsync(int amount);
 
         Task<List<TEntity>> GetAllByConditionAsync(Expression<Func<TEntity, bool>> predicate);

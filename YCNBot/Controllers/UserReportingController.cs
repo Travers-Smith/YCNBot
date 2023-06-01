@@ -24,12 +24,12 @@ namespace YCNBot.Controllers
             _userService = userService;
         }
 
-        [HttpGet("get-active-users")] 
+        [HttpGet("get-active-users")]
         public async Task<IActionResult> GetActiveUsers(int? pageNumber)
         {
             Guid? userIdentifier = _identityService.GetUserIdentifier();
 
-            if(userIdentifier == null)
+            if (userIdentifier == null)
             {
                 return Unauthorized();
             }
@@ -40,9 +40,9 @@ namespace YCNBot.Controllers
 
             Dictionary<Guid, int> usersChatUsage = await _chatService.GetUsersUsage((pageSize * pageNumber.Value) - pageSize, pageSize);
 
-            IEnumerable<User>? users = await _userService.GetUsers(usersChatUsage.Keys);
+            Dictionary<string, User>? users = await _userService.GetUserDetails(usersChatUsage.Keys);
 
-            if(users is null)
+            if (users is null)
             {
                 return StatusCode(500);
             }
@@ -50,14 +50,14 @@ namespace YCNBot.Controllers
             return Ok(users
                 .Select(user => new UserUsageModel
                 {
-                    TotalChats = usersChatUsage[user.Id],
+                    TotalChats = usersChatUsage[user.Value.Id],
                     User = new UserModel
                     {
-                        Email = user.Email,
-                        FirstName = user.FirstName,
-                        LastName = user.LastName,
-                        Department = user.Department,
-                        JobTitle = user.JobTitle,
+                        Email = user.Value.Email,
+                        FirstName = user.Value.FirstName,
+                        LastName = user.Value.LastName,
+                        Department = user.Value.Department,
+                        JobTitle = user.Value.JobTitle,
                     }
                 })
                 .OrderByDescending(x => x.TotalChats));

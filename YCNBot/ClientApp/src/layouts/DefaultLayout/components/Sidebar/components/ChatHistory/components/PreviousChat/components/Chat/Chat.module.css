@@ -1,0 +1,13 @@
+.text {
+    padding-left: 10px;
+    color: white;
+}
+
+.rightSide{
+    text-align: end;
+    width: 40%;
+}
+
+.error {
+    color: red;
+}

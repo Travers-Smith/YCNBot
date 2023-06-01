@@ -1,14 +1,17 @@
-﻿using YCNBot.Data.Repositories;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Graph;
 using YCNBot.Core;
 using YCNBot.Core.Repositories;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Graph;
+using YCNBot.Data.Repositories;
 
 namespace YCNBot.Data
 {
     public class UnitOfWork : IUnitOfWork
     {
         private IChatRepository? _chat;
+        private ICommunityPromptRepository? _communityPrompt;
+        private ICommunityPromptCommentRepository? _communityPromptComment;
+        private ICommunityPromptLikeRepository? _communityPromptLike;
         private IChatCompletionRepository? _openAIChatCompletion;
         private IConfiguration _configuration;
         private IMessageRepository? _message;
@@ -19,9 +22,9 @@ namespace YCNBot.Data
         private IRepository<Core.Entities.UserFeedback>? _userFeedback;
 
         private readonly YCNBotContext _context;
-        private readonly GraphServiceClient _graphServiceClient;
         private readonly HttpClient _openAIClient;
         private readonly HttpClient _azureOpenAIClient;
+        private readonly GraphServiceClient _graphServiceClient;
 
         public UnitOfWork(IConfiguration configuration, YCNBotContext context, GraphServiceClient graphServiceClient, IHttpClientFactory httpClientFactory)
         {
@@ -36,6 +39,12 @@ namespace YCNBot.Data
 
         public IChatRepository Chat => _chat ??= new ChatRepository(_context);
 
+        public ICommunityPromptRepository CommunityPrompt => _communityPrompt ??= new CommunityPromptRepository(_context);
+
+        public ICommunityPromptCommentRepository CommunityPromptComment => _communityPromptComment ??= new CommunityPromptCommentRepository(_context);
+
+        public ICommunityPromptLikeRepository CommunityPromptLike => _communityPromptLike ??= new CommunityPromptLikeRepository(_context);
+
         public IChatCompletionRepository OpenAIChatCompletion => _openAIChatCompletion ??= new OpenAIChatCompletionRepository(_openAIClient);
 
         public IMessageRepository Message => _message ??= new MessageRepository(_context);
@@ -49,6 +58,7 @@ namespace YCNBot.Data
         public IUserAgreedTermsRepository UserAgreedTerms => _userAgreedTerms ??= new UserAgreedTermsRepository(_context);
 
         public IRepository<Core.Entities.UserFeedback> UserFeedback => _userFeedback ??= new Repository<Core.Entities.UserFeedback>(_context);
+
 
         public async Task CommitAsync()
         {

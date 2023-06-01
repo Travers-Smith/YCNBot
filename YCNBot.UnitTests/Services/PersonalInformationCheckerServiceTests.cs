@@ -12,7 +12,7 @@ namespace YCNBot.UnitTest.Services
         {
             Mock<ISymbolsRemoverService> SymbolsRemove = new();
             Mock<IStopWordRemoverService> stopwordRemover = new();
-            Mock<IUnitOfWork> unitOfWork = new ();
+            Mock<IUnitOfWork> unitOfWork = new();
 
             IEnumerable<string> names = new List<string> { "Tom" };
 
@@ -31,8 +31,8 @@ namespace YCNBot.UnitTest.Services
                 .Returns(names);
 
             Assert.True(new PersonalInformationCheckerService(
-                SymbolsRemove.Object, 
-                stopwordRemover.Object, 
+                SymbolsRemove.Object,
+                stopwordRemover.Object,
                 unitOfWork.Object).CheckIfStringHasNames("Tom is in a test"));
         }
 

@@ -4,6 +4,8 @@ namespace YCNBot.Core.Services
 {
     public interface IUserService
     {
-        Task<IEnumerable<User>?> GetUsers(IEnumerable<Guid> ids);
+        Task<User?> GetUser(Guid uniqueIdentifier);
+
+        Task<Dictionary<string, User>?> GetUserDetails(IEnumerable<Guid> ids);
     }
 }

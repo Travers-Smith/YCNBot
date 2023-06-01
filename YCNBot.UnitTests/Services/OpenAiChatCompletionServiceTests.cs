@@ -20,8 +20,8 @@ namespace YCNBot.UnitTest.Services
                 {
                     new ChatCompletionChoice
                     {
-                        Message = new ChatCompletionChoiceMessage 
-                        { 
+                        Message = new ChatCompletionChoiceMessage
+                        {
                             Content = completedMessage,
                             Role = "System"
                         }
@@ -46,7 +46,7 @@ namespace YCNBot.UnitTest.Services
                         Text = "Test response",
                         IsSystem = true,
                     }
-                }, 
+                },
                 "modelname");
 
             Assert.Equal(result, completedMessage);

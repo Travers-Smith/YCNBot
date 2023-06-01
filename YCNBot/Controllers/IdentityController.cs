@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using YCNBot.Core.Entities;
 using YCNBot.Core.Services;
 using YCNBot.Models;
 
@@ -10,11 +11,12 @@ namespace YCNBot.Controllers
     {
         private readonly IIdentityService _identityService;
         private readonly IUserAgreedTermsService _userAgreedTermsService;
-
-        public IdentityController(IIdentityService identityService, IUserAgreedTermsService userAgreedTermsService)
+        private readonly IUserService _userService;
+        public IdentityController(IIdentityService identityService, IUserAgreedTermsService userAgreedTermsService, IUserService userService)
         {
             _identityService = identityService;
             _userAgreedTermsService = userAgreedTermsService;
+            _userService = userService;
         }
 
         [HttpGet("get-user")]
@@ -22,35 +24,41 @@ namespace YCNBot.Controllers
         {
             Guid? userIdentifier = _identityService.GetUserIdentifier();
 
-            if(userIdentifier == null)
+            if (userIdentifier == null)
             {
                 return Unauthorized();
             }
 
-            UserModel user = new()
+            User? user = await _userService.GetUser(userIdentifier.Value);
+
+            UserModel userModel = new()
             {
                 AgreedToTerms = await _userAgreedTermsService.CheckAgreed(userIdentifier.Value),
                 Email = _identityService.GetEmail(),
+                Department = user?.Department,
+                FirstName = user?.FirstName,
+                LastName = user?.LastName,
+                JobTitle = user?.JobTitle,
                 IsAdmin = _identityService.IsAdmin()
             };
 
             string? name = _identityService.GetName();
 
-            if(name == null)
+            if (name == null)
             {
                 return NotFound();
             }
 
             string[] names = name.Split(",");
 
-            user.LastName = names.FirstOrDefault()?.Trim();
+            userModel.LastName = names.FirstOrDefault()?.Trim();
 
-            if(names.Length > 1)
+            if (names.Length > 1)
             {
-                user.FirstName = names[1].Trim();
+                userModel.FirstName = names[1].Trim();
             }
 
-            return Ok(user);
+            return Ok(userModel);
         }
     }
 }

@@ -9,6 +9,12 @@ namespace YCNBot.Core
 
         IChatRepository Chat { get; }
 
+        ICommunityPromptRepository CommunityPrompt { get; }
+
+        ICommunityPromptCommentRepository CommunityPromptComment { get; }
+
+        ICommunityPromptLikeRepository CommunityPromptLike { get; }
+
         IChatCompletionRepository OpenAIChatCompletion { get; }
 
         IMessageRepository Message { get; }

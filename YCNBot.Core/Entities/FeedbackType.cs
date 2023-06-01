@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace YCNBot.Core.Entities;
+﻿namespace YCNBot.Core.Entities;
 
 public partial class FeedbackType
 {
