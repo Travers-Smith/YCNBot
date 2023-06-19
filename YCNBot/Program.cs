@@ -87,6 +87,7 @@ services.AddApplicationInsightsTelemetry();
 
 services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+services.AddTransient<ICaseLawDetectionService, CaseLawDetectionService>();
 services.AddTransient<IChatService, ChatService>();
 services.AddTransient<IChatCompletionService, AzureChatCompletionService>();
 services.AddTransient<IChatCompletionService, OpenAIChatCompletionService>();

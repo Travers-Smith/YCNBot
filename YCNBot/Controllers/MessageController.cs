@@ -11,6 +11,7 @@ namespace YCNBot.Controllers
     [Route("[controller]")]
     public class MessageController : ControllerBase
     {
+        private readonly ICaseLawDetectionService _caseLawDetectionService;
         private readonly IChatService _chatService;
         private readonly IChatModelPickerService _chatModelPickerService;
         private readonly IConfiguration _configuration;
@@ -18,10 +19,11 @@ namespace YCNBot.Controllers
         private readonly IMessageService _messageService;
         private readonly IPersonalInformationCheckerService _personalInformationCheckerService;
 
-        public MessageController(IChatService chatService, IChatModelPickerService chatModelPickerService,
+        public MessageController(ICaseLawDetectionService caseLawDetectionService, IChatService chatService, IChatModelPickerService chatModelPickerService,
             IConfiguration configuration, IIdentityService identityService, IMessageService messageService,
             IPersonalInformationCheckerService personalInformationCheckerService)
         {
+            _caseLawDetectionService = caseLawDetectionService;
             _chatModelPickerService = chatModelPickerService;
             _chatService = chatService;
             _messageService = messageService;
@@ -96,13 +98,16 @@ namespace YCNBot.Controllers
                 return BadRequest("contains personal information");
             }
 
+            bool containsCaseLaw = _caseLawDetectionService.CheckContainsCaseLaw(systemMessage);
+
             newMessages.Add(new Message
             {
                 ChatId = chat.Id,
                 Chat = chat.Id == 0 ? chat : null,
                 IsSystem = true,
                 Text = systemMessage,
-                DateAdded = DateTime.Now
+                DateAdded = DateTime.Now,
+                ContainsCaseLaw = containsCaseLaw
             });
 
             await _messageService.AddRange(newMessages);
@@ -114,6 +119,7 @@ namespace YCNBot.Controllers
                     Name = chat.Name,
                     UniqueIdentifier = chat.UniqueIdentifier
                 },
+                ContainsCaseLaw = containsCaseLaw,
                 IsSystem = true,
                 Text = systemMessage,
                 UniqueIdentifier = newMessages.Select(x => x.UniqueIdentifier).LastOrDefault(),

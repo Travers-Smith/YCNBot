@@ -16,5 +16,7 @@
 
         public bool? OutputContainedPersonalInformation { get; set; }
 
+        public bool? ContainsCaseLaw { get; set; }
+
     }
 }
