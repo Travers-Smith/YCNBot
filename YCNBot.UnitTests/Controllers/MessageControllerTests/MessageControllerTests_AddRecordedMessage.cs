@@ -5,6 +5,7 @@ using YCNBot.Controllers;
 using YCNBot.Core.Entities;
 using YCNBot.Core.Services;
 using YCNBot.Models;
+using YCNBot.Services;
 
 namespace YCNBot.UnitTest.Controllers.MessageControllerTests
 {
@@ -13,6 +14,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         [Fact]
         public async Task AddRecordedMessage_NoChatCompletionService_Return500()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var chatCompletionService = new Mock<IChatCompletionService>();
             var messageService = new Mock<IMessageService>();
@@ -26,7 +28,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
 
             chatModelPicker.Setup(x => x.GetModel(It.IsAny<string>()));
 
-            var controller = new MessageController(chatService.Object, chatModelPicker.Object,
+            var controller = new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
 
@@ -62,6 +64,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         [Fact]
         public async Task AddRecordedMessage_FailsOnChatCompletion_DoesntAdd()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var chatCompletionService = new Mock<IChatCompletionService>();
             var messageService = new Mock<IMessageService>();
@@ -72,7 +75,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
 
             chatModelPicker.Setup(x => x.GetModel(It.IsAny<string>())).Returns(chatCompletionService.Object);
 
-            var controller = new MessageController(chatService.Object, chatModelPicker.Object,
+            var controller = new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
             Guid userIdentifier = Guid.NewGuid();
@@ -99,6 +102,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         [Fact]
         public async Task AddRecordedMessage_SuccessfulWithExistingChat_SavesMessage()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var chatCompletionService = new Mock<IChatCompletionService>();
             var messageService = new Mock<IMessageService>();
@@ -110,7 +114,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
 
             chatModelPicker.Setup(x => x.GetModel(It.IsAny<string>())).Returns(chatCompletionService.Object);
 
-            var controller = new MessageController(chatService.Object, chatModelPicker.Object,
+            var controller = new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
             Guid userIdentifier = Guid.NewGuid();
@@ -141,6 +145,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         [Fact]
         public async Task AddRecordedMessage_SuccessfulWithNewChat_SavesMessage()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var chatCompletionService = new Mock<IChatCompletionService>();
             var messageService = new Mock<IMessageService>();
@@ -152,7 +157,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
 
             chatModelPicker.Setup(x => x.GetModel(It.IsAny<string>())).Returns(chatCompletionService.Object);
 
-            var controller = new MessageController(chatService.Object, chatModelPicker.Object,
+            var controller = new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
             Guid userIdentifier = Guid.NewGuid();
@@ -178,6 +183,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         [Fact]
         public async Task AddRecordedMessage_UnauthorizedChat_DoesntSaveMessage()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var chatCompletionService = new Mock<IChatCompletionService>();
             var messageService = new Mock<IMessageService>();
@@ -188,7 +194,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             chatModelPicker.Setup(x => x.GetModel(It.IsAny<string>())).Returns(chatCompletionService.Object);
             var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
 
-            var controller = new MessageController(chatService.Object, chatModelPicker.Object,
+            var controller = new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
 
@@ -218,6 +224,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         [Fact]
         public async Task AddRecordedMessage_SuccessfulExistingChat_ReturnsLastMessageWithChat()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var chatCompletionService = new Mock<IChatCompletionService>();
             var messageService = new Mock<IMessageService>();
@@ -232,9 +239,9 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
 
             personalInformationCheckerService
               .Setup(x => x.CheckIfStringHasNames(It.IsAny<string>()))
-              .Returns(false);
+            .Returns(false);
 
-            var controller = new MessageController(chatService.Object, chatModelPicker.Object,
+            var controller = new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
             Guid userIdentifier = Guid.NewGuid();
@@ -272,8 +279,125 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         }
 
         [Fact]
+        public async Task AddRecordedMessage_ContainsCaseLaw_ReturnsObjectWithContainCaseLawTrue()
+        {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
+            var chatService = new Mock<IChatService>();
+            var chatCompletionService = new Mock<IChatCompletionService>();
+            var messageService = new Mock<IMessageService>();
+
+            var identityService = new Mock<IIdentityService>();
+            var configuration = new Mock<IConfiguration>();
+
+            var chatModelPicker = new Mock<IChatModelPickerService>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
+
+            chatModelPicker.Setup(x => x.GetModel(It.IsAny<string>())).Returns(chatCompletionService.Object);
+
+            personalInformationCheckerService
+              .Setup(x => x.CheckIfStringHasNames(It.IsAny<string>()))
+            .Returns(false);
+
+            var controller = new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
+
+            Guid userIdentifier = Guid.NewGuid();
+
+            Chat chat = new()
+            {
+                UniqueIdentifier = Guid.NewGuid(),
+                UserIdentifier = userIdentifier,
+            };
+
+            chatService.Setup(x => x.GetByUniqueIdentifierWithMessages(It.IsAny<Guid>())).ReturnsAsync(chat);
+
+            string assistantTextResponse = "this is a case Lister v Hesley Hall Ltd";
+
+            caseLawDetectionService.Setup(x => x.CheckContainsCaseLaw(assistantTextResponse)).Returns(true);
+
+            identityService.Setup(x => x.GetUserIdentifier()).Returns(userIdentifier);
+
+
+            chatCompletionService
+                .Setup(x => x.AddChatCompletion(It.IsAny<IEnumerable<Message>>(), It.IsAny<string>()))
+                .ReturnsAsync(assistantTextResponse);
+
+            var result = await controller.AddRecordedChat(new AddMessageModel
+            {
+                ChatIdentifier = Guid.NewGuid(),
+                Message = "I am a test"
+            });
+
+            Assert.Multiple(() =>
+            {
+                var actionResult = Assert.IsType<OkObjectResult>(result);
+                var dataResult = Assert.IsType<MessageModel>(actionResult.Value);
+                Assert.True(dataResult.ContainsCaseLaw);
+            });
+        }
+
+        [Fact]
+        public async Task AddRecordedMessage_NoCaseLaw_ReturnsObjectWithContainCaseLawFalse()
+        {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
+            var chatService = new Mock<IChatService>();
+            var chatCompletionService = new Mock<IChatCompletionService>();
+            var messageService = new Mock<IMessageService>();
+
+            var identityService = new Mock<IIdentityService>();
+            var configuration = new Mock<IConfiguration>();
+
+            var chatModelPicker = new Mock<IChatModelPickerService>();
+            var personalInformationCheckerService = new Mock<IPersonalInformationCheckerService>();
+
+            chatModelPicker.Setup(x => x.GetModel(It.IsAny<string>())).Returns(chatCompletionService.Object);
+
+            personalInformationCheckerService
+              .Setup(x => x.CheckIfStringHasNames(It.IsAny<string>()))
+            .Returns(false);
+
+            var controller = new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
+                configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
+
+            Guid userIdentifier = Guid.NewGuid();
+
+            Chat chat = new()
+            {
+                UniqueIdentifier = Guid.NewGuid(),
+                UserIdentifier = userIdentifier,
+            };
+
+            chatService.Setup(x => x.GetByUniqueIdentifierWithMessages(It.IsAny<Guid>())).ReturnsAsync(chat);
+
+            string assistantTextResponse = "this is a response";
+
+            caseLawDetectionService.Setup(x => x.CheckContainsCaseLaw(assistantTextResponse)).Returns(false);
+
+            identityService.Setup(x => x.GetUserIdentifier()).Returns(userIdentifier);
+
+
+            chatCompletionService
+                .Setup(x => x.AddChatCompletion(It.IsAny<IEnumerable<Message>>(), It.IsAny<string>()))
+                .ReturnsAsync(assistantTextResponse);
+
+            var result = await controller.AddRecordedChat(new AddMessageModel
+            {
+                ChatIdentifier = Guid.NewGuid(),
+                Message = "I am a test"
+            });
+
+            Assert.Multiple(() =>
+            {
+                var actionResult = Assert.IsType<OkObjectResult>(result);
+                var dataResult = Assert.IsType<MessageModel>(actionResult.Value);
+                Assert.False(dataResult.ContainsCaseLaw);
+            });
+        }
+
+        [Fact]
         public async Task AddRecordedMessage_UnauthorizedChat_ReturnsUnauthorized()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var chatCompletionService = new Mock<IChatCompletionService>();
             var messageService = new Mock<IMessageService>();
@@ -289,7 +413,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
 
             chatModelPicker.Setup(x => x.GetModel(It.IsAny<string>())).Returns(chatCompletionService.Object);
 
-            var controller = new MessageController(chatService.Object, chatModelPicker.Object,
+            var controller = new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
 
@@ -321,6 +445,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         [Fact]
         public async Task AddRecordedMessage_AddFails_ThrowsException()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var chatCompletionService = new Mock<IChatCompletionService>();
             var messageService = new Mock<IMessageService>();
@@ -334,9 +459,9 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
 
             personalInformationCheckerService
                 .Setup(x => x.CheckIfStringHasNames(It.IsAny<string>()))
-                .Returns(false);
+            .Returns(false);
 
-            var controller = new MessageController(chatService.Object, chatModelPicker.Object,
+            var controller = new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
             Guid chatIdentifier = Guid.NewGuid();
@@ -368,6 +493,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         [Fact]
         public async Task AddRecordedMessage_UserMessageContainsName_BadRequestObjectResult()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var chatCompletionService = new Mock<IChatCompletionService>();
             var messageService = new Mock<IMessageService>();
@@ -385,7 +511,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
                 .Setup(pis => pis.CheckIfStringHasNames(messageText))
                 .Returns(true);
 
-            var controller = new MessageController(chatService.Object, chatModelPicker.Object,
+            var controller = new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
             var result = await controller.AddRecordedChat(new AddMessageModel()
@@ -399,6 +525,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         [Fact]
         public async Task AddRecordedMessage_SystemMessageContainsName_BadRequestObjectResult()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var chatCompletionService = new Mock<IChatCompletionService>();
             var messageService = new Mock<IMessageService>();
@@ -418,7 +545,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
 
             personalInformationCheckerService.Setup(pis => pis.CheckIfStringHasNames(messageText)).Returns(true);
 
-            var controller = new MessageController(chatService.Object, chatModelPicker.Object,
+            var controller = new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
             var result = await controller.AddRecordedChat(new AddMessageModel()

@@ -6,6 +6,7 @@ import MessageRating from "./components/MessageRating/MessageRating";
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import AddToCommunity from "./components/AddToCommunity/AddToCommunity";
 import UserAvatar from "../../../../../../components/UserAvatar/UserAvatar";
+import config from "../../../../../../config.json";
 
 const Message = ({ data, recordChat, questionText }) => {
     const {
@@ -16,7 +17,8 @@ const Message = ({ data, recordChat, questionText }) => {
         uniqueIdentifier,
         isError,
         isPiError,
-        containsPI
+        containsPI,
+        containsCaseLaw
     } = data;
 
     const {
@@ -54,7 +56,7 @@ const Message = ({ data, recordChat, questionText }) => {
                         <div className={`${classes.loading} ${darkMode ? classes.loadingDark : classes.loadingWhite}`}/>
                     :
                         <>
-                            <div>
+                            <div className={containsCaseLaw ? classes.containsCaseLaw : undefined}>
                                 {
                                     (!isError && text?.length > 0) ?
                                         text?.split("\n")?.map((paragraph, index) => (
@@ -72,19 +74,25 @@ const Message = ({ data, recordChat, questionText }) => {
                                                     isPiError ?
                                                         "There was personal information in this message"
                                                     :
-                                                        "TSBot is undergoing maintenance - please check back later!"
+                                                        config.APP_NAME + " is undergoing maintenance - please check back later!"
                                                 }
                                             </div>
                                         </div>
                                 }
                                 {
-                                    containsPI &&
+                                    (containsPI || containsCaseLaw) &&
                                         <div className={classes.error}>
                                             <ReportProblemIcon
                                                 color="danger"
                                             />
                                             <div>
-                                                There was personal information in this message                                            
+                                                {
+                                                    containsCaseLaw ? 
+                                                        "This message cannot be copied as it contains case law"
+                                                    :
+                                                        "There was personal information in this message"
+
+                                                }
                                             </div>
                                         </div>
                                 }

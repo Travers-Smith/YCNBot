@@ -113,7 +113,8 @@ const NewMessage = ({
                     text: data.text,
                     isSystem: true,
                     uniqueIdentifier: data.uniqueIdentifier,
-                    containsPI: data.outputContainedPersonalInformation
+                    containsPI: data.outputContainedPersonalInformation,
+                    containsCaseLaw: data.containsCaseLaw
                 });
                 
                 return newChat;

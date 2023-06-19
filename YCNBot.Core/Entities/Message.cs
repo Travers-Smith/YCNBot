@@ -16,5 +16,7 @@ public partial class Message
 
     public DateTime? DateAdded { get; set; }
 
+    public bool? ContainsCaseLaw { get; set; }
+
     public virtual Chat Chat { get; set; } = null!;
 }

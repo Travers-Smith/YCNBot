@@ -13,6 +13,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         [Fact]
         public async Task AddNonRecordedChat_Successful_ReturnsMessage()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var chatCompletionService = new Mock<IChatCompletionService>();
             var configuration = new Mock<IConfiguration>();
@@ -32,7 +33,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             identityService.Setup(x => x.IsAuthenticated()).Returns(true);
             configuration.Setup(config => config["AllowPersonalMode"]).Returns("true");
 
-            IActionResult result = await new MessageController(chatService.Object, chatModelPicker.Object,
+            IActionResult result = await new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object)
                 .AddNonRecordedChat(new AddNonRecordedMessageModel[]
                 {
@@ -55,6 +56,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         [Fact]
         public async Task AddNonRecordedChat_PersonalModeForbidden_ReturnsForbiddenResult()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var chatCompletionService = new Mock<IChatCompletionService>();
             var configuration = new Mock<IConfiguration>();
@@ -69,7 +71,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
 
             identityService.Setup(x => x.IsAuthenticated()).Returns(true);
 
-            IActionResult result = await new MessageController(chatService.Object, chatModelPicker.Object,
+            IActionResult result = await new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object)
                 .AddNonRecordedChat(new AddNonRecordedMessageModel[]
                 {
@@ -86,6 +88,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         [Fact]
         public async Task AddNonRecordedChat_NoChatCompletionService_Returns500()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var chatCompletionService = new Mock<IChatCompletionService>();
             var configuration = new Mock<IConfiguration>();
@@ -103,7 +106,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             identityService.Setup(x => x.IsAuthenticated()).Returns(true);
             configuration.Setup(config => config["AllowPersonalMode"]).Returns("true");
 
-            IActionResult result = await new MessageController(chatService.Object, chatModelPicker.Object,
+            IActionResult result = await new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object)
                 .AddNonRecordedChat(new AddNonRecordedMessageModel[]
                 {
@@ -125,6 +128,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         [Fact]
         public async Task AddNonRecordedChat_AddFails_ThrowException()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var chatCompletionService = new Mock<IChatCompletionService>();
             var configuration = new Mock<IConfiguration>();
@@ -140,7 +144,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
 
             identityService.Setup(x => x.IsAuthenticated()).Returns(true);
 
-            MessageController controller = new MessageController(chatService.Object, chatModelPicker.Object,
+            MessageController controller = new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
             await Assert.ThrowsAsync<Exception>(() => controller.AddNonRecordedChat(new AddNonRecordedMessageModel[]
@@ -156,6 +160,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         [Fact]
         public async Task AddNonRecordedChat_Unauthorized_ReturnsUnauthorized()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var chatCompletionService = new Mock<IChatCompletionService>();
             var configuration = new Mock<IConfiguration>();
@@ -170,7 +175,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
 
             identityService.Setup(x => x.IsAuthenticated()).Returns(false);
 
-            IActionResult result = await new MessageController(chatService.Object, chatModelPicker.Object,
+            IActionResult result = await new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object)
                 .AddNonRecordedChat(new AddNonRecordedMessageModel[]
                 {
@@ -187,6 +192,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         [Fact]
         public async Task ChangeRating_Success_UpdatesMessage()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var configuration = new Mock<IConfiguration>();
             var identityService = new Mock<IIdentityService>();
@@ -206,7 +212,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
 
             identityService.Setup(x => x.GetUserIdentifier()).Returns(userIdentifier);
 
-            IActionResult result = await new MessageController(chatService.Object, chatModelPicker.Object,
+            IActionResult result = await new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object)
                 .ChangeMessageRating(new UpdateMessageRatingModel
                 {
@@ -220,6 +226,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         [Fact]
         public async Task ChangeRating_Success_Returns204()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var configuration = new Mock<IConfiguration>();
             var identityService = new Mock<IIdentityService>();
@@ -239,7 +246,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
 
             identityService.Setup(x => x.GetUserIdentifier()).Returns(userIdentifier);
 
-            IActionResult result = await new MessageController(chatService.Object, chatModelPicker.Object,
+            IActionResult result = await new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object)
                 .ChangeMessageRating(new UpdateMessageRatingModel
                 {
@@ -255,6 +262,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         [Fact]
         public async Task ChangeRating_UnauthorizedMessage_DoesntUpdateMessage()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var configuration = new Mock<IConfiguration>();
             var identityService = new Mock<IIdentityService>();
@@ -274,7 +282,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
 
             identityService.Setup(x => x.GetUserIdentifier()).Returns(userIdentifier);
 
-            IActionResult result = await new MessageController(chatService.Object, chatModelPicker.Object,
+            IActionResult result = await new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object)
                 .ChangeMessageRating(new UpdateMessageRatingModel
                 {
@@ -288,6 +296,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         [Fact]
         public async Task ChangeRating_UnauthorizedMessage_ReturnsUnauthorized()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var configuration = new Mock<IConfiguration>();
             var identityService = new Mock<IIdentityService>();
@@ -307,7 +316,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
 
             identityService.Setup(x => x.GetUserIdentifier()).Returns(userIdentifier);
 
-            IActionResult result = await new MessageController(chatService.Object, chatModelPicker.Object,
+            IActionResult result = await new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object)
                 .ChangeMessageRating(new UpdateMessageRatingModel
                 {
@@ -321,6 +330,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
         [Fact]
         public async Task ChangeRating_UpdateFails_ThrowsException()
         {
+            var caseLawDetectionService = new Mock<ICaseLawDetectionService>();
             var chatService = new Mock<IChatService>();
             var configuration = new Mock<IConfiguration>();
             var identityService = new Mock<IIdentityService>();
@@ -343,7 +353,7 @@ namespace YCNBot.UnitTest.Controllers.MessageControllerTests
             messageService.Setup(x => x.Update(It.IsAny<Message>())).ThrowsAsync(new Exception());
 
 
-            MessageController controller = new MessageController(chatService.Object, chatModelPicker.Object,
+            MessageController controller = new MessageController(caseLawDetectionService.Object, chatService.Object, chatModelPicker.Object,
                 configuration.Object, identityService.Object, messageService.Object, personalInformationCheckerService.Object);
 
 

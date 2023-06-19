@@ -73,9 +73,10 @@ namespace YCNBot.Controllers
                 Messages = chat.Messages
                     .Select(message => new MessageModel
                     {
-                        Text = message.Text,
+                        ContainsCaseLaw = message.ContainsCaseLaw,
                         IsSystem = message.IsSystem,
                         Rating = message.Rating,
+                        Text = message.Text,
                         UniqueIdentifier = message.UniqueIdentifier
                     })
             });

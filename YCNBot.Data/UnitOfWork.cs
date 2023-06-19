@@ -8,6 +8,7 @@ namespace YCNBot.Data
 {
     public class UnitOfWork : IUnitOfWork
     {
+        private IChatCompletionRepository? _azureOpenAIChatCompletion;
         private IChatRepository? _chat;
         private ICommunityPromptRepository? _communityPrompt;
         private ICommunityPromptCommentRepository? _communityPromptComment;
@@ -35,7 +36,7 @@ namespace YCNBot.Data
             _openAIClient = httpClientFactory.CreateClient("OpenAIClient");
         }
 
-        public IChatCompletionRepository AzureOpenAIChatCompletion => _openAIChatCompletion ??= new AzureChatCompletionRepository(_azureOpenAIClient, _configuration);
+        public IChatCompletionRepository AzureOpenAIChatCompletion => _azureOpenAIChatCompletion ??= new AzureChatCompletionRepository(_azureOpenAIClient, _configuration);
 
         public IChatRepository Chat => _chat ??= new ChatRepository(_context);
 
