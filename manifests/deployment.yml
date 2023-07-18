@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: deployment
+metadata: 
+  name: ycnbot
+spec: 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ycnbot
+  template:
+    metadata:
+      labels:
+        app: ycnbot
+  spec: 
+    containers: 
+      - name: ycnbot
+        image: <image_location>
+        ports:
+        - containerPort: 80
